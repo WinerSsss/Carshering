@@ -1,45 +1,35 @@
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
 
 from carservice.models import Car, Offer
-from carservice.forms import CarForm, OfferForm
 
 
-class CarCreateView(generic.FormView):
-    template_name = 'car_form.html'
-    form_class = CarForm
-    success_url = reverse_lazy('car_form')
+class CarCreateView(CreateView):
+    model = Car
+    fields = ['serial_number', 'car_mileage', 'car_model', 'car_year']
+    template_name = 'car_create.html'
+    success_url = '/car/read'
 
 
-    def form_valid(self, form):
-        ans = super().form_valid(form)
-        oczyszczone = form.cleaned_data
-
-        Car.objects.create(
-            serial_number=oczyszczone['serial_number'],
-            car_mileage=oczyszczone['car_mileage'],
-            car_model=oczyszczone['car_model'],
-            car_year=oczyszczone['car_year'],
+class CarReadView(View):
+    def get(self, request):
+        return render(
+            request, template_name='car_read.html',
+            context={'cars': Car.objects.all()}
         )
 
-        return ans
+class OfferCreateView(CreateView):
+    model = Offer
+    fields = ['car', 'description', 'price']
+    template_name = 'offer_create.html'
+    success_url = '/offer/read/'
 
 
-class OfferCreateView(generic.FormView):
-    template_name = 'offer_form.html'
-    form_class = OfferForm
-    success_url = reverse_lazy('offer_form')
-
-
-    def form_valid(self, form):
-        ans = super().form_valid(form)
-        oczyszczone = form.cleaned_data
-
-        Offer.objects.create(
-            description=oczyszczone['description'],
-            price=oczyszczone['price'],
-            id_car=oczyszczone['id_car'],
+class OfferReadView(View):
+    def get(self, request):
+        return render(
+            request, template_name='offer_read.html',
+            context={'offers': Offer.objects.all()}
         )
-
-        return ans

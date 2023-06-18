@@ -1,10 +1,11 @@
 from django.db import models
-from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 
 class Car(models.Model):
     serial_number = models.CharField(max_length=17)
-    car_mileage = models.PositiveIntegerField(validators=[MaxValueValidator(300000)])
+    car_mileage = models.PositiveIntegerField()
     car_model = models.CharField(max_length=30)
     car_year = models.DateField()
 
@@ -14,30 +15,21 @@ class Car(models.Model):
 
 class Offer(models.Model):
     description = models.TextField()
-    price = models.FloatField(validators=[MaxValueValidator(100000.0)])
+    price = models.FloatField(validators=[MinValueValidator(10.0)])
 
-    id_car = models.ForeignKey(Car, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'Price: ({self.price}), car:({self.id_car})'
-
-
-class User(models.Model):
-    name = models.CharField(max_length=30)
-    surname = models.CharField(max_length=30)
-    username = models.CharField(max_length=30)
-    password = models.CharField(max_length=30)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Name: {self.name} {self.surname}'
+        return f'Price: ({self.price}), car:({self.car})'
 
 
 class Rent(models.Model):
     status = models.BooleanField(default=True)
-    rent_duration = models.DurationField()
+    rent_start = models.DateField(null=True)
+    rent_stop = models.DateField(null=True)
 
-    id_offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: {self.rent_duration}, offer: {self.id_offer}, user: {self.id_user}'

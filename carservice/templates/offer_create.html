@@ -6,11 +6,10 @@
 </head>
 <body>
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    <table>{{ form }}</table>
-    <input type="submit" value="Submit" class="btn btn-primary">
-  </form>
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save offer">
+</form>
 {% endblock %}
 </body>
 </html>
