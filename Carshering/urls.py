@@ -20,5 +20,6 @@ from carservice import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('car/create', views.CarCreateView.as_view(), name='car_form')
+    path('car/create', views.CarCreateView.as_view(), name='car_form'),
+    path('offer/create', views.OfferCreateView.as_view(), name='offer_form')
 ]
