@@ -3,8 +3,8 @@ from django.core.validators import MaxValueValidator
 
 
 class Car(models.Model):
-    serial_number = models.IntegerField(validators=[MaxValueValidator(100)])
-    car_mileage = models.PositiveIntegerField(validators=[MaxValueValidator(10)])
+    serial_number = models.CharField(max_length=17)
+    car_mileage = models.PositiveIntegerField(validators=[MaxValueValidator(300000)])
     car_model = models.CharField(max_length=30)
     car_year = models.DateField()
 
