@@ -14,7 +14,7 @@ class Car(models.Model):
 
 class Offer(models.Model):
     description = models.TextField()
-    price = models.PositiveFloatField(validators=[MaxValueValidator(10.0)])
+    price = models.FloatField(validators=[MaxValueValidator(10.0)])
 
     id_car = models.ForeignKey(Car, on_delete=models.CASCADE)
 
