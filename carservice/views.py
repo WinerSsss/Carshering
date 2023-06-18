@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 
-from carservice.models import Car
-from carservice.forms import CarForm
+from carservice.models import Car, Offer
+from carservice.forms import CarForm, OfferForm
 
 
 class CarCreateView(generic.FormView):
@@ -26,4 +26,20 @@ class CarCreateView(generic.FormView):
         return ans
 
 
+class OfferCreateView(generic.FormView):
+    template_name = 'offer_form.html'
+    form_class = OfferForm
+    success_url = reverse_lazy('offer_form')
 
+
+    def form_valid(self, form):
+        ans = super().form_valid(form)
+        oczyszczone = form.cleaned_data
+
+        Offer.objects.create(
+            description=oczyszczone['description'],
+            price=oczyszczone['price'],
+            id_car=oczyszczone['id_car'],
+        )
+
+        return ans
