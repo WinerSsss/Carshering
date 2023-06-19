@@ -32,4 +32,4 @@ class Rent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
-        return f'Rent status: {self.status}, rent duration: {self.rent_duration}, offer: {self.id_offer}, user: {self.id_user}'
+        return f'Rent status: {self.status}, rent duration: ({self.rent_start} - {self.rent_stop}), offer: {self.offer}, user: {self.user}'
