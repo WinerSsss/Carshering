@@ -3,7 +3,7 @@ from django.views import generic, View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
-from carservice.models import Car, Offer
+from carservice.models import Car, Offer, Rent
 
 
 class CarCreateView(CreateView):
@@ -32,4 +32,19 @@ class OfferReadView(View):
         return render(
             request, template_name='offer_read.html',
             context={'offers': Offer.objects.all()}
+        )
+
+
+class RentCreateView(CreateView):
+    model = Rent
+    fields = ['status', 'rent_start', 'rent_stop', 'offer', 'user']
+    template_name = 'rent_create.html'
+    success_url = '/rent/read'
+
+
+class RentReadView(View):
+    def get(self, request):
+        return render(
+            request, template_name='rent_read.html',
+            context={'rents': Rent.objects.all()}
         )

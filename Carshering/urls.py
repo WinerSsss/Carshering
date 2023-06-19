@@ -24,4 +24,6 @@ urlpatterns = [
     path('car/read/', views.CarReadView.as_view()),
     path('offer/create/', views.OfferCreateView.as_view()),
     path('offer/read/', views.OfferReadView.as_view()),
+    path('rent/create/', views.RentCreateView.as_view()),
+    path('rent/read/', views.RentReadView.as_view()),
 ]
