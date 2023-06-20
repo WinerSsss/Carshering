@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Car(models.Model):
@@ -24,12 +25,23 @@ class Offer(models.Model):
 
 
 class Rent(models.Model):
-    status = models.BooleanField(default=True)
+    status = models.CharField(max_length=30, blank=True, null=True)
     rent_start = models.DateField(null=True)
     rent_stop = models.DateField(null=True)
 
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+
+    def status_answer(self):
+        current_time = timezone.now().date()
+        if self.rent_start:
+            if self.rent_start <= current_time <= self.rent_stop:
+                return 'Rent active'
+        return 'Rent inactive'
+
+    def save(self, *args, **kwargs):
+        self.status = self.status_answer()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.rent_start} - {self.rent_stop}), offer: {self.offer}, user: {self.user}'
