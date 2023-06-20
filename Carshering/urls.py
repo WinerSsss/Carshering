@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Carshering.registration.views import UserRegistrationView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("registration/", UserRegistrationView.as_view())
 ]
