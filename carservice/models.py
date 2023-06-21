@@ -2,10 +2,20 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+
+def validate_ser_num(value):
+    if len(value) != 17:
+        raise ValidationError(
+            _('Please, put the correct VIN number.'),
+            params={"value": value},
+        )
 
 
 class Car(models.Model):
-    serial_number = models.CharField(max_length=17)
+    serial_number = models.CharField(max_length=17, validators=[validate_ser_num])
     car_mileage = models.PositiveIntegerField()
     car_model = models.CharField(max_length=30)
     car_year = models.DateField()
@@ -30,7 +40,7 @@ class Rent(models.Model):
     rent_stop = models.DateField(null=True)
 
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def status_answer(self):
         current_time = timezone.now().date()
