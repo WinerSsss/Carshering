@@ -21,9 +21,9 @@ from carservice import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('car/create/', views.CarCreateView.as_view()),
-    path('car/read/', views.CarReadView.as_view()),
+    path('car/read/', views.CarReadView.as_view(), name='car_read'),
     path('offer/create/', views.OfferCreateView.as_view()),
-    path('offer/read/', views.OfferReadView.as_view()),
+    path('offer/read/', views.OfferReadView.as_view(), name='offer_read'),
     path('rent/create/', views.RentCreateView.as_view()),
-    path('rent/read/', views.RentReadView.as_view()),
+    path('rent/read/', views.RentListView.as_view(), name='rent_read'),
 ]
