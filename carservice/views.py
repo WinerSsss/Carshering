@@ -46,12 +46,12 @@ class RentCreateView(CreateView):
 class RentListView(View):
     def get(self, request):
         rents = Rent.objects.all()
-        rent_status = [rent.status_answer() for rent in rents]
-        rent_start = [rent.rent_start for rent in rents]
-        rent_stop = [rent.rent_stop for rent in rents]
+        # rent_status = [rent.status_answer() for rent in rents]
+        # rent_start = [rent.rent_start for rent in rents]
+        # rent_stop = [rent.rent_stop for rent in rents]
 
         return render(
             request,
             template_name='rent_read.html',
-            context={'rents': rents, 'rent_status': rent_status, 'rent_start': rent_start, 'rent_stop': rent_stop,}
+            context={'rents': rents}
         )
