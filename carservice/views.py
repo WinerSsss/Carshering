@@ -3,8 +3,9 @@ from django.views import generic, View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
-from carservice.models import Car, Offer, Rent
+from . models import Car, Offer, Rent
 from django.utils import timezone
+from .forms import CarUpdateForm, CarDeleteForm
 
 
 class CarCreateView(CreateView):
@@ -26,6 +27,35 @@ class OfferCreateView(CreateView):
     fields = ['car', 'description', 'price']
     template_name = 'offer_create.html'
     success_url = reverse_lazy('offer_read')
+
+
+class CarUpdate(View):
+    def get(self, request):
+        form = CarUpdateForm()
+        return render(request, 'car_update.html', {'form': form})
+
+    def post(self,request):
+        form = CarUpdateForm(request.POST)
+        if form.is_valid():
+            car = form.save()
+            return redirect('/car/read/')
+        return render(request,'car_modify.html',{'form': form})
+
+
+class CarDelete(View):
+    def get(self, request):
+        cars = Car.objects.all()
+        form = CarDeleteForm()
+        return render(request, 'car_delete.html', {'form': form, 'cars': cars})
+
+    def post(self, request):
+        form = CarDeleteForm(request.POST)
+        if form.is_valid():
+            car_id = form.cleaned_data['car']
+            car = Car.objects.get(id=car_id)
+            car.delete()
+            return redirect('/car/read/')
+        return render(request, 'car_delete.html', {'form': form})
 
 
 class OfferReadView(View):
