@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST">
+  {% csrf_token %}
+  <select name="offer">
+    {% for offer in offers %}
+      <option value="{{ offer.id }}">{{ offer.title }}</option>
+    {% endfor %}
+  </select>
+  {{ form.as_p }}
+  <button type="submit">Change Price</button>
+</form>
+</body>
+</html>

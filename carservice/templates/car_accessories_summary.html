@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>car accessories</title>
+</head>
+<body>
+{% block content %}
+  <h1>Summary:</h1>
+  {% if accessories %}
+    <ul>
+    {% for accessory in accessories %}
+      <li>{{ accessory }}</li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>no accessories selected</p>
+  {% endif %}
+{% endblock %}
+</body>
+</html>

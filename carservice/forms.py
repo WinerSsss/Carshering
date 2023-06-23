@@ -16,3 +16,26 @@ class CarDeleteForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['car'].choices = [(car.id, str(car)) for car in Car.objects.all()]
 
+class OfferPriceModifyForm(forms.ModelForm):
+    offer_choice = forms.ModelChoiceField(queryset=Offer.objects.all(), empty_label=None)
+    class Meta:
+        model = Offer
+        fields = ['price']
+
+
+class CarAccessoriesForm(forms.Form):
+    SEAT_CHILD = 'seat_child'
+    GPS = 'gps'
+    ROOF_RACK = 'roof_rack'
+
+    ACCESSORY_CHOICE = (
+        (SEAT_CHILD, 'Child seat'),
+        (GPS, 'GPS'),
+        (ROOF_RACK, 'Roof rack'),
+    )
+
+    accessories = forms.MultipleChoiceField(
+        choices=ACCESSORY_CHOICE,
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )

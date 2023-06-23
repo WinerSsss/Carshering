@@ -28,7 +28,11 @@ urlpatterns = [
     path('car/delete/',views.CarDelete.as_view()),
     path('offer/create/', views.OfferCreateView.as_view()),
     path('offer/read/', views.OfferReadView.as_view(), name='offer_read'),
+    path('offer/price_change/', views.OfferPriceModify.as_view()),
     path('rent/create/', views.RentCreateView.as_view()),
     path('rent/read/', views.RentListView.as_view(), name='rent_read'),
+    path('car/accessories/',views.CarAccessoriesView.as_view()),
+    path('car/car_accessories_summary/',views.CarAccessoriesSummaryView.as_view()),
+
 
 ]

@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView
 
 from . models import Car, Offer, Rent
 from django.utils import timezone
-from .forms import CarUpdateForm, CarDeleteForm
+from .forms import CarUpdateForm, CarDeleteForm, OfferPriceModifyForm, CarAccessoriesForm
 
 
 class CarCreateView(CreateView):
@@ -29,6 +29,23 @@ class OfferCreateView(CreateView):
     success_url = reverse_lazy('offer_read')
 
 
+class OfferPriceModify(View):
+    def get(self, request):
+        offers = Offer.objects.all()
+        form = OfferPriceModifyForm()
+        return render(request, 'offer_price_update.html', {'form': form, 'offers': offers})
+    def post(self, request):
+        if request.method == "POST":
+            form = OfferPriceModifyForm(request.POST)
+            if form.is_valid():
+                offer_id = request.POST.get('offer')
+                new_price = form.cleaned_data['price']
+                offer = Offer.objects.get(id=offer_id)
+                offer.price = new_price
+                offer.save()
+                return redirect('/offer/read/')
+            offers = Offer.objects.all()
+            return render(request,'offer_price_update.html',{'form': form,'offers': offers})
 class CarUpdate(View):
     def get(self, request):
         form = CarUpdateForm()
@@ -85,3 +102,21 @@ class RentListView(View):
             template_name='rent_read.html',
             context={'rents': rents, 'rent_status': rent_status, 'rent_start': rent_start, 'rent_stop': rent_stop,}
         )
+
+class CarAccessoriesView(View):
+    def get(self, request):
+        form = CarAccessoriesForm()
+        return render(request, 'car_accessories_choice.html', {'form': form})
+
+    def post(self, request):
+        form = CarAccessoriesForm(request.POST)
+        if form.is_valid():
+            selected_accessories = form.cleaned_data['accessories']
+            request.session['selected_accessories'] = selected_accessories
+            return redirect('/car/car_accessories_summary')
+        return render(request, 'car_accessories_choice.html', {'form': form})
+
+class CarAccessoriesSummaryView(View):
+    def get(self, request):
+        accessories = request.session.get('selected_accessories', [])
+        return render(request, 'car_accessories_summary.html', {'accessories': accessories})
