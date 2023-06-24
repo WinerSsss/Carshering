@@ -4,10 +4,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserCreationForm
+from django.core.exceptions import ValidationError
 
 
 @login_required
 def edit_profile(request):
+
     if request.method == 'POST':
         user = request.user
         username = request.POST['username']
