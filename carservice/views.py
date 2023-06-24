@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
@@ -29,18 +29,30 @@ class OfferCreateView(CreateView):
     success_url = reverse_lazy('offer_read')
 
 
-class CarUpdate(View):
-    def get(self, request):
-        form = CarUpdateForm()
-        return render(request, 'car_update.html', {'form': form})
+# class CarUpdate(View):
+#     def get(self, request):
+#         form = CarUpdateForm()
+#         return render(request, 'car_update.html', {'form': form})
+#
+#     def post(self,request):
+#         form = CarUpdateForm(request.POST)
+#         if form.is_valid():
+#             car = form.save()
+#             return redirect('/car/read/')
+#         return render(request,'car_modify.html',{'form': form})
+class CarEditView(View):
+    def get(self, request, car_id):
+        car = get_object_or_404(Car, pk=car_id)
+        form = CarUpdateForm(instance=car)
+        return render(request, 'car_update.html', {'form': form, 'car': car})
 
-    def post(self,request):
-        form = CarUpdateForm(request.POST)
+    def post(self, request, car_id):
+        car = get_object_or_404(Car, pk=car_id)
+        form = CarUpdateForm(request.POST, instance=car)
         if form.is_valid():
-            car = form.save()
+            form.save()
             return redirect('/car/read/')
-        return render(request,'car_modify.html',{'form': form})
-
+        return render(request, 'car_update.html', {'form': form, 'car': car})
 
 class CarDelete(View):
     def get(self, request):

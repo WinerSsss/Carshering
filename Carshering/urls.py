@@ -24,7 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('car/create/', views.CarCreateView.as_view()),
     path('car/read/', views.CarReadView.as_view(), name='car_read'),
-    path('car/update/',views.CarUpdate.as_view()),
+    path('car/modify/<int:car_id>/',views.CarEditView.as_view(),name='car_edit'),
     path('car/delete/',views.CarDelete.as_view()),
     path('offer/create/', views.OfferCreateView.as_view()),
     path('offer/read/', views.OfferReadView.as_view(), name='offer_read'),
