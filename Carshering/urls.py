@@ -11,9 +11,8 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('profile/', profile, name='profile'),
     path('profile/edit/', edit_profile, name='edit_profile'),
-
     path('users/', include('users.urls')),
-    path('car/create/', CarCreateView.as_view()),
+    path('car/create/', CarCreateView.as_view(), name='car_create'),
     path('car/read/', CarReadView.as_view(), name='car_read'),
     path('offer/create/', OfferCreateView.as_view()),
     path('offer/read/', OfferReadView.as_view(), name='offer_read'),
