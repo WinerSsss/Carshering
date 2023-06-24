@@ -29,17 +29,6 @@ class OfferCreateView(CreateView):
     success_url = reverse_lazy('offer_read')
 
 
-# class CarUpdate(View):
-#     def get(self, request):
-#         form = CarUpdateForm()
-#         return render(request, 'car_update.html', {'form': form})
-#
-#     def post(self,request):
-#         form = CarUpdateForm(request.POST)
-#         if form.is_valid():
-#             car = form.save()
-#             return redirect('/car/read/')
-#         return render(request,'car_modify.html',{'form': form})
 class CarEditView(View):
     def get(self, request, car_id):
         car = get_object_or_404(Car, pk=car_id)

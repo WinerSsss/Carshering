@@ -3,7 +3,6 @@ from django import forms
 
 
 class CarUpdateForm(forms.ModelForm):
-    #car_choice = forms.ModelChoiceField(queryset=Car.objects.all(), empty_label=None)
 
     class Meta:
         model = Car
