@@ -3,7 +3,7 @@ from django.views import generic, View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
-from carservice.models import Car, Offer, Rent
+from .models import Car, Offer, Rent
 from django.utils import timezone
 
 
@@ -20,6 +20,7 @@ class CarReadView(View):
             request, template_name='car_read.html',
             context={'cars': Car.objects.all()}
         )
+
 
 class OfferCreateView(CreateView):
     model = Offer
@@ -46,7 +47,6 @@ class RentCreateView(CreateView):
 class RentListView(View):
     def get(self, request):
         rents = Rent.objects.all()
-
 
         return render(
             request,
