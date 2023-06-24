@@ -75,6 +75,22 @@ def validate_year(value):
         )
 
 
+def valif_car_exists(value):
+    if Car.objects.filter(serial_number=value).exists():
+        raise ValidationError(
+            _('Car with this VIN number already exists.'),
+            params={"value": value},
+        )
+
+
+def validate_mileage(value):
+    if value > 1000000:
+        raise ValidationError(
+            _('You can\'t add the car with more than 1 000 000 km.'),
+            params={"value": value},
+        )
+
+
 BRAND_CHOICES = (
     ('Volkswagen', 'Volkswagen'),
     ('BMW', 'BMW'),
@@ -104,8 +120,8 @@ BRAND_CHOICES = (
 
 
 class Car(models.Model):
-    serial_number = models.CharField(max_length=17, validators=[validate_ser_num])
-    car_mileage = models.PositiveIntegerField()
+    serial_number = models.CharField(max_length=17, validators=[validate_ser_num, valif_car_exists])
+    car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
     car_model = models.CharField(max_length=30)
     year_of_prod = models.DateField(null=True, validators=[validate_year])
@@ -117,11 +133,19 @@ class Car(models.Model):
         return f'Model: {self.car_model, self.car_brand}, serial number:({self.serial_number})'
 
 
+def val_car_availab(value):
+    if Offer.objects.filter(car=value).exists():
+        raise ValidationError(
+            _('This car is already offered.'),
+            params={"value": value},
+        )
+
+
 class Offer(models.Model):
     description = models.TextField()
     price = models.FloatField(validators=[MinValueValidator(10.0)])
 
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, validators=[val_car_availab])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -163,12 +187,29 @@ def future_rent(value):
         )
 
 
+def val_offer_availab(value):
+    if Rent.objects.filter(offer=value).exists():
+        raise ValidationError(
+            _('This offer is already rented.'),
+            params={"value": value},
+        )
+
+
+def min_rent_length(value):
+    day = timedelta(hours=24)
+    if value < date.today() + day:
+        raise ValidationError(
+            _('You can rent a car for a day minimum.'),
+            params={"value": value},
+        )
+
+
 class Rent(models.Model):
     status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
     rent_start = models.DateField(null=True, validators=[val_rent, future_rent])
-    rent_stop = models.DateField(null=True, validators=[val_rent, rent_length])
+    rent_stop = models.DateField(null=True, validators=[val_rent, rent_length, min_rent_length])
 
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, validators=[val_offer_availab])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
