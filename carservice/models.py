@@ -209,7 +209,13 @@ class Rent(models.Model):
     status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
     rent_start = models.DateField(null=True, validators=[val_rent, future_rent])
     rent_stop = models.DateField(null=True, validators=[val_rent, rent_length, min_rent_length])
-    duration = models.DurationField(null=True, choices=STATUS_CHOICES, default=ACTIVE)
+
+    def duration(self):
+        duration = self.rent_stop - self.rent_start
+        max_rent = timedelta(days=30)
+        if duration > max_rent:
+            self.status = FINISHED
+        return duration
 
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE, validators=[val_offer_availab])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
