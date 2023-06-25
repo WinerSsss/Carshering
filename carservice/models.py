@@ -34,24 +34,19 @@ class Offer(models.Model):
         return f'Price: ({self.price}), car:({self.car})'
 
 
+STATUS_CHOICES = [
+    ('active', 'Rent active'),
+    ('finished', 'Rent finished'),
+]
+
+
 class Rent(models.Model):
-    status = models.CharField(max_length=30, blank=True, null=True)
+    status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES)
     rent_start = models.DateField(null=True)
     rent_stop = models.DateField(null=True)
 
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
-    def status_answer(self):
-        current_time = timezone.now().date()
-        if self.rent_start:
-            if self.rent_start <= current_time <= self.rent_stop:
-                return 'Rent active'
-        return 'Rent inactive'
-
-    def save(self, *args, **kwargs):
-        self.status = self.status_answer()
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.rent_start} - {self.rent_stop}), offer: {self.offer}, user: {self.user}'
