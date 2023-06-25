@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-
 from . models import Car, Offer, Rent
 from django.utils import timezone
 from .forms import CarUpdateForm, CarDeleteForm, OfferPriceModifyForm, CarAccessoriesForm
@@ -21,6 +20,7 @@ class CarReadView(View):
             request, template_name='car_read.html',
             context={'cars': Car.objects.all()}
         )
+
 
 class OfferCreateView(CreateView):
     model = Offer
@@ -93,16 +93,14 @@ class RentCreateView(CreateView):
 class RentListView(View):
     def get(self, request):
         rents = Rent.objects.all()
-        rent_status = [rent.status_answer() for rent in rents]
-        rent_start = [rent.rent_start for rent in rents]
-        rent_stop = [rent.rent_stop for rent in rents]
 
         return render(
             request,
             template_name='rent_read.html',
-            context={'rents': rents, 'rent_status': rent_status, 'rent_start': rent_start, 'rent_stop': rent_stop,}
-        )
 
+            context={'rents': rents, 'rent_status': rent_status, 'rent_start': rent_start, 'rent_stop': rent_stop,})
+
+     
 class CarAccessoriesView(View):
     def get(self, request):
         form = CarAccessoriesForm()
@@ -120,3 +118,6 @@ class CarAccessoriesSummaryView(View):
     def get(self, request):
         accessories = request.session.get('selected_accessories', [])
         return render(request, 'car_accessories_summary.html', {'accessories': accessories})
+
+            context={'rents': rents}
+        )

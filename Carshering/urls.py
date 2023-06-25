@@ -1,38 +1,27 @@
-# URLS
-
-"""Carshering URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.generic import TemplateView
+from users.views import profile, edit_profile
 
-from carservice import views
+
+from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('car/create/', views.CarCreateView.as_view()),
-    path('car/read/', views.CarReadView.as_view(), name='car_read'),
-    path('car/update/',views.CarUpdate.as_view()),
-    path('car/delete/',views.CarDelete.as_view()),
-    path('offer/create/', views.OfferCreateView.as_view()),
-    path('offer/read/', views.OfferReadView.as_view(), name='offer_read'),
-    path('offer/price_change/', views.OfferPriceModify.as_view()),
-    path('rent/create/', views.RentCreateView.as_view()),
-    path('rent/read/', views.RentListView.as_view(), name='rent_read'),
-    path('car/accessories/',views.CarAccessoriesView.as_view()),
-    path('car/car_accessories_summary/',views.CarAccessoriesSummaryView.as_view()),
-
+    path('car/update/', CarUpdate.as_view()),
+    path('car/delete/', CarDelete.as_view()),
+    path('offer/price_change/', OfferPriceModify.as_view()),
+    path('car/accessories/', CarAccessoriesView.as_view()),
+    path('car/car_accessories_summary/', CarAccessoriesSummaryView.as_view()),
+    path('admin/', admin.site.urls),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('profile/', profile, name='profile'),
+    path('profile/edit/', edit_profile, name='edit_profile'),
+    path('users/', include('users.urls')),
+    path('car/create/', CarCreateView.as_view()),
+    path('car/read/', CarReadView.as_view(), name='car_read'),
+    path('offer/create/', OfferCreateView.as_view()),
+    path('offer/read/', OfferReadView.as_view(), name='offer_read'),
+    path('rent/create/', RentCreateView.as_view()),
+    path('rent/read/', RentListView.as_view(), name='rent_read'),
 
 ]
