@@ -2,30 +2,30 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Car, Offer, Rent
 
 
 from django.utils import timezone
 
-from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
+from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm
 
 
-class CarCreateView(LoginRequiredMixin, CreateView):
+class CarCreateView(CreateView):
     model = Car
     fields = ['serial_number', 'car_mileage', 'car_model', 'car_year']
     template_name = 'car_create.html'
     success_url = reverse_lazy('car_read')
 
 
-class CarReadView(LoginRequiredMixin, View):
+class CarReadView(View):
     def get(self, request):
         return render(
             request, template_name='car_read.html',
             context={'cars': Car.objects.all()}
         )
 
-class CarUpdateView(LoginRequiredMixin, View):
+class CarUpdateView(View):
     def get(self, request, car_id):
         car = get_object_or_404(Car, pk=car_id)
         form = CarUpdateForm(instance=car)
@@ -40,7 +40,7 @@ class CarUpdateView(LoginRequiredMixin, View):
         return render(request, 'car_update.html', {'form': form, 'car': car})
 
 
-class CarDeleteView(LoginRequiredMixin, View):
+class CarDeleteView(View):
     def get(self, request):
         cars = Car.objects.all()
         form = CarDeleteForm()
@@ -56,7 +56,7 @@ class CarDeleteView(LoginRequiredMixin, View):
         return render(request, 'car_delete.html', {'form': form})
 
 
-class OfferCreateView(LoginRequiredMixin, CreateView):
+class OfferCreateView(CreateView):
     model = Offer
     fields = ['car', 'description', 'price']
     template_name = 'offer_create.html'
@@ -70,7 +70,7 @@ class OfferReadView(View):
             context={'offers': Offer.objects.all()}
         )
 
-class OfferUpdateView(LoginRequiredMixin, View):
+class OfferUpdateView(View):
     def get(self, request, offer_id):
         offer = get_object_or_404(Offer, pk=offer_id)
         form = OfferUpdateForm(instance=offer)
@@ -85,7 +85,7 @@ class OfferUpdateView(LoginRequiredMixin, View):
         return render(request, 'offer_update.html', {'form': form, 'offer': offer})
 
 
-class OfferDeleteView(LoginRequiredMixin, View):
+class OfferDeleteView(View):
     def get(self, request):
         offers = Offer.objects.all()
         form = OfferDeleteForm()
@@ -117,3 +117,18 @@ class RentListView(View):
             template_name='rent_read.html',
             context={'rents': rents}
         )
+
+class RentUpdateView(View):
+    def get(self, request, rent_id):
+        rent = get_object_or_404(Rent, id=rent_id)
+        form = RentUpdateForm(instance=rent)
+        return render(request, 'rent_update.html', {'form': form, 'rent': rent})
+
+    def post(self, request, rent_id):
+        rent = get_object_or_404(Rent, id=rent_id)
+        form = RentUpdateForm(request.POST, instance=rent)
+        if form.is_valid():
+            form.save()
+            return redirect('rent_read')
+        return render(request, 'rent_update.html', {'form': form, 'rent': rent})
+

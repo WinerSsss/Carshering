@@ -1,4 +1,4 @@
-from . models import Car, Offer
+from . models import Car, Offer, Rent
 from django import forms
 
 
@@ -26,3 +26,8 @@ class OfferDeleteForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['offer'].choices = [(offer.id, str(offer)) for offer in Offer.objects.all()]
+
+class RentUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Rent
+        fields = ['status', 'rent_start', 'rent_stop', 'offer', 'user']

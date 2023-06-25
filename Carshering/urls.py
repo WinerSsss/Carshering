@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from users.views import profile, edit_profile
 
 
-from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView, CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView
+from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView, CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView, RentUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +23,5 @@ urlpatterns = [
     path('offer/delete/', OfferDeleteView.as_view(), name='offer_car'),
     path('rent/create/', RentCreateView.as_view()),
     path('rent/read/', RentListView.as_view(), name='rent_read'),
+    path('rent/update/<int:rent_id>/',RentUpdateView.as_view(),name='rent_update'),
 ]
