@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime, date, timedelta
+from Carshering.settings import RENT_LENGTH_IN_DAYS
 
 
 def vin_validator(vin_number):
@@ -176,8 +177,7 @@ def past_rent(rent_date):
 
 
 def rent_length(rent_date):
-    month = timedelta(days=30)
-    if rent_date > date.today() + month:
+    if rent_date > date.today() + RENT_LENGTH_IN_DAYS:
         raise ValidationError(
             _('You can rent a car for a month maximum.'),
             params={'rent_date': rent_date},
