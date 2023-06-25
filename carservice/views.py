@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
@@ -57,14 +57,14 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class CarUpdateView(View):
+class CarUpdateView(LoginRequiredMixin, View):
     def get(self, request, car_id):
         car = get_object_or_404(Car, pk=car_id)
         form = CarUpdateForm(instance=car)
         return render(request, 'car_update.html', {'form': form, 'car': car})
 
 
-class OfferReadView(LoginRequiredMixin, View):
+class OfferReadView(LoginRequiredMixin, LoginRequiredMixin, View):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -76,7 +76,7 @@ class OfferReadView(LoginRequiredMixin, View):
             return Offer.objects.filter(user=self.request.user)
 
 
-class CarDeleteView(View):
+class CarDeleteView(LoginRequiredMixin, View):
     def get(self, request):
         offers = self.get_queryset()
 
@@ -106,7 +106,7 @@ class OfferReadView(View):
         )
 
 
-class OfferUpdateView(View):
+class OfferUpdateView(LoginRequiredMixin,View):
     def get(self, request, offer_id):
         offer = get_object_or_404(Offer, pk=offer_id)
         form = OfferUpdateForm(instance=offer)
@@ -121,7 +121,7 @@ class OfferUpdateView(View):
         return render(request, 'offer_update.html', {'form': form, 'offer': offer})
 
 
-class OfferDeleteView(View):
+class OfferDeleteView(LoginRequiredMixin, View):
     def get(self, request):
         offers = Offer.objects.all()
         form = OfferDeleteForm()
