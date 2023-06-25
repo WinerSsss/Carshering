@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from users.views import profile, edit_profile
-
+from django.conf.urls.static import static
 
 from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView
 
@@ -19,4 +20,4 @@ urlpatterns = [
     path('offer/read/', OfferReadView.as_view(), name='offer_read'),
     path('rent/create/', RentCreateView.as_view()),
     path('rent/read/', RentListView.as_view(), name='rent_read'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
