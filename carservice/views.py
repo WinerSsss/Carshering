@@ -20,7 +20,7 @@ class CarCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         initial['year_of_prod'] = 'YYYY-MM-DD'
         return initial
 
-    def check_auth(self):
+    def test_func(self):
         return self.request.user.is_authenticated
 
     def form_valid(self, form):
@@ -32,7 +32,7 @@ class CarReadView(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = 'home'
     redirect_field_name = 'redirect_to'
 
-    def check_auth(self):
+    def test_func(self):
         return self.request.user.is_authenticated
 
     def form_valid(self, form):
@@ -61,7 +61,7 @@ class OfferCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'offer_create.html'
     success_url = reverse_lazy('offer_read')
 
-    def check_auth(self):
+    def test_func(self):
         return self.request.user.is_authenticated
 
     def form_valid(self, form):
@@ -73,7 +73,7 @@ class OfferReadView(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = 'home'
     redirect_field_name = 'redirect_to'
 
-    def check_auth(self):
+    def test_func(self):
         return self.request.user.is_authenticated
 
     def form_valid(self, form):
@@ -108,7 +108,7 @@ class RentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         initial['rent_start'] = now()
         return initial
 
-    def check_auth(self):
+    def test_func(self):
         return self.request.user.is_authenticated
 
     def form_valid(self, form):
