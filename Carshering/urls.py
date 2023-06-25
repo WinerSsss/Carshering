@@ -5,6 +5,8 @@ from django.views.generic import TemplateView
 from users.views import profile, edit_profile
 from django.conf.urls.static import static
 from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView, CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView
+from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView
+
 
 urlpatterns = [
 

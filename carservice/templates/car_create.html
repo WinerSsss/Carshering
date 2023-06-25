@@ -5,6 +5,12 @@
     <title>Title</title>
 </head>
 <body>
+{% if user.is_authenticated %}
+        <a href="{% url 'car_create' %}">Add your car</a>
+    {% else %}
+        <a  href="{% url 'login' %}">Login</a> |
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
 {% block content %}
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
