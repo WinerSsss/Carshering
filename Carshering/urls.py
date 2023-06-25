@@ -10,6 +10,7 @@ from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCre
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('about', TemplateView.as_view(template_name='about.html'), name='about'),
     path('profile/', profile, name='profile'),
     path('profile/edit/', edit_profile, name='edit_profile'),
 

@@ -1,7 +1,45 @@
-.blablabla{
-    font-color: #FF0000;
+body{
+    font-family: 'Roboto';
 }
 
-.tytul{
-    color: #000000;
+.img-home{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    width: 50%;
+}
+
+.home-title{
+    color: #808080;
+    font-weight: bold;
+    text-align: center;
+    font-size: 36px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.w-footer{
+    margin-bottom: 0px !important;
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 20px;
+    background: #808080;
+    text-align: center;
+}
+
+.w-footer p{
+    display: inline-block;
+    color: white;
+    padding-top: 10px;
+}
+
+.text-about{
+    text-align: center;
+    margin-top: 30px;
+}
+
+.text-about p{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
