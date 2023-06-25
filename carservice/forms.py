@@ -31,3 +31,10 @@ class RentUpdateForm(forms.ModelForm):
     class Meta:
         model = Rent
         fields = ['status', 'rent_start', 'rent_stop', 'offer', 'user']
+
+class RentDeleteForm(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        super(RentDeleteForm, self).__init__(*args, **kwargs)
+        self.fields['rent'].queryset = Rent.objects.filter(user=user)
+
+    rent = forms.ModelChoiceField(queryset=Rent.objects.none())

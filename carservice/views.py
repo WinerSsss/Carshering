@@ -8,7 +8,7 @@ from .models import Car, Offer, Rent
 
 from django.utils import timezone
 
-from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm
+from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class CarCreateView(LoginRequiredMixin, CreateView):
@@ -109,6 +109,7 @@ class RentCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('rent_read')
 
 
+
 class RentListView(View):
     def get(self, request):
         rents = Rent.objects.all()
@@ -134,3 +135,16 @@ class RentUpdateView(LoginRequiredMixin, View):
             return redirect('rent_read')
         return render(request, 'rent_update.html', {'form': form, 'rent': rent})
 
+
+class RentDeleteView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = RentDeleteForm(user=request.user)
+        return render(request, 'rent_delete.html', {'form': form})
+
+    def post(self, request):
+        form = RentDeleteForm(request.user, request.POST)
+        if form.is_valid():
+            rent = form.cleaned_data['rent']
+            rent.delete()
+            return redirect('rent_read')
+        return render(request, 'rent_delete.html', {'form': form})
