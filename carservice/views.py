@@ -24,9 +24,6 @@ class CarCreateView(LoginRequiredMixin, CreateView):
 
 
 class CarReadView(LoginRequiredMixin, View):
-    login_url = 'home'
-    redirect_field_name = 'redirect_to'
-
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -78,7 +75,7 @@ class OfferReadView(LoginRequiredMixin, View):
 
 class RentCreateView(LoginRequiredMixin, CreateView):
     model = Rent
-    fields = ['rent_start', 'rent_stop', 'offer']
+    fields = ['rent_start', 'offer']
     template_name = 'rent_create.html'
     success_url = reverse_lazy('rent_read')
 
