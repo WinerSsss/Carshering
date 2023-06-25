@@ -2,15 +2,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from users.views import profile, edit_profile
-
-
 from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView
 
 urlpatterns = [
 
-
-    path('car/modify/<int:car_id>/', CarEditView.as_view(),name='car_edit'),
-    path('car/delete/', CarDelete.as_view()),
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('profile/', profile, name='profile'),
