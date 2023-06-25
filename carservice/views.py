@@ -3,13 +3,11 @@ from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from .models import Car, Offer, Rent
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.timezone import now
 
 
-class CarCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = 'home'
-    redirect_field_name = 'redirect_to'
+class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
     fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'year_of_prod']
     template_name = 'car_create.html'
@@ -20,20 +18,14 @@ class CarCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         initial['year_of_prod'] = 'YYYY-MM-DD'
         return initial
 
-    def test_func(self):
-        return self.request.user.is_authenticated
-
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
-class CarReadView(LoginRequiredMixin, UserPassesTestMixin, View):
+class CarReadView(LoginRequiredMixin, View):
     login_url = 'home'
     redirect_field_name = 'redirect_to'
-
-    def test_func(self):
-        return self.request.user.is_authenticated
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -53,29 +45,18 @@ class CarReadView(LoginRequiredMixin, UserPassesTestMixin, View):
         )
 
 
-class OfferCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = 'home'
-    redirect_field_name = 'redirect_to'
+class OfferCreateView(LoginRequiredMixin, CreateView):
     model = Offer
     fields = ['car', 'description', 'price']
     template_name = 'offer_create.html'
     success_url = reverse_lazy('offer_read')
-
-    def test_func(self):
-        return self.request.user.is_authenticated
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
-class OfferReadView(LoginRequiredMixin, UserPassesTestMixin, View):
-    login_url = 'home'
-    redirect_field_name = 'redirect_to'
-
-    def test_func(self):
-        return self.request.user.is_authenticated
-
+class OfferReadView(LoginRequiredMixin, View):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -95,9 +76,7 @@ class OfferReadView(LoginRequiredMixin, UserPassesTestMixin, View):
         )
 
 
-class RentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    login_url = 'home'
-    redirect_field_name = 'redirect_to'
+class RentCreateView(LoginRequiredMixin, CreateView):
     model = Rent
     fields = ['rent_start', 'rent_stop', 'offer']
     template_name = 'rent_create.html'
@@ -108,21 +87,12 @@ class RentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         initial['rent_start'] = now()
         return initial
 
-    def test_func(self):
-        return self.request.user.is_authenticated
-
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
-class RentListView(LoginRequiredMixin, UserPassesTestMixin, View):
-    login_url = 'home'
-    redirect_field_name = 'redirect_to'
-
-    def check_auth(self):
-        return self.request.user.is_authenticated
-
+class RentListView(LoginRequiredMixin, View):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
