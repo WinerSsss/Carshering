@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -7,6 +7,21 @@ from datetime import datetime, date, timedelta
 
 
 def vin_validator(vin_number):
+    '''
+    Validate the VIN (Vehicle Identification Number) using the following formula:
+    - Transliterate letters to their numerical counterparts.
+    - Multiply the numbers by their assigned weights.
+    - Add up the products.
+    - Divide the total sum by 11 to find the remainder.
+    - If the remainder is 10, the check digit should be "X".
+    - Compare the calculated remainder with the expected check digit.
+
+    Parameters:
+        vin_number (str): The VIN to be validated.
+
+    Returns:
+        bool: True if the VIN is valid, False otherwise.
+    '''
     values = {
         'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8,
         'J': 1, 'K': 2, 'L': 3, 'M': 4, 'N': 5, 'P': 7, 'R': 9,
@@ -43,51 +58,51 @@ def vin_validator(vin_number):
     return checksum % 11 == expected_checksum
 
 
-def validate_ser_num(value):
-    if len(value) != 17:
+def check_vin_number(vin_number):
+    if len(vin_number) != 17:
         raise ValidationError(
             _('VIN number is too short.'),
-            params={"value": value},
+            params={'vin_number': vin_number},
         )
-    if not value.isalnum():
+    if not vin_number.isalnum():
         raise ValidationError(
             _('VIN number should contain only letters and numbers.'),
-            params={"value": value},
+            params={'vin_number': vin_number},
         )
-    if not vin_validator(value):
+    if not vin_validator(vin_number):
         raise ValidationError(
             _('Enter the valid VIN number.'),
-            params={"value": value},
+            params={'vin_number': vin_number},
         )
 
 
-def validate_year(value):
-    first_made_car = datetime.strptime('1886-01-29', '%Y-%m-%d').date()
-    if value < first_made_car:
+def validate_year(prod_year):
+    first_made_car = date(1886, 1, 29)
+    if prod_year < first_made_car:
         raise ValidationError(
             _('You can\'t enter the year before the first car was made.'),
-            params={"value": value},
+            params={'prod_year': prod_year},
         )
-    if value > date.today():
+    if prod_year > date.today():
         raise ValidationError(
             _('You can\'t add the car from future.'),
-            params={"value": value},
+            params={'prod_year': prod_year},
         )
 
 
-def valif_car_exists(value):
-    if Car.objects.filter(serial_number=value).exists():
+def check_car_exists(car_number):
+    if Car.objects.filter(serial_number=car_number).exists():
         raise ValidationError(
             _('Car with this VIN number already exists.'),
-            params={"value": value},
+            params={'car_number': car_number},
         )
 
 
-def validate_mileage(value):
-    if value > 1000000:
+def validate_mileage(mileage):
+    if mileage > 1000000:
         raise ValidationError(
             _('You can\'t add the car with more than 1 000 000 km.'),
-            params={"value": value},
+            params={'mileage': mileage},
         )
 
 
@@ -120,11 +135,11 @@ BRAND_CHOICES = (
 
 
 class Car(models.Model):
-    serial_number = models.CharField(max_length=17, validators=[validate_ser_num, valif_car_exists])
+    serial_number = models.CharField(max_length=17, validators=[check_vin_number, check_car_exists])
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
     car_model = models.CharField(max_length=30)
-    year_of_prod = models.DateField(null=True, validators=[validate_year])
+    date_of_prod = models.DateField(null=True, validators=[validate_year])
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -133,11 +148,11 @@ class Car(models.Model):
         return f'Model: {self.car_model, self.car_brand}, serial number:({self.serial_number})'
 
 
-def val_car_availab(value):
-    if Offer.objects.filter(car=value).exists():
+def car_available(vin_number):
+    if Offer.objects.filter(car=vin_number).exists():
         raise ValidationError(
             _('This car is already offered.'),
-            params={"value": value},
+            params={'vin_number': vin_number},
         )
 
 
@@ -145,53 +160,44 @@ class Offer(models.Model):
     description = models.TextField()
     price = models.FloatField(validators=[MinValueValidator(10.0)])
 
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, validators=[val_car_availab])
+    car = models.OneToOneField(Car, on_delete=models.CASCADE, validators=[car_available])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Price: ({self.price}), car:({self.car})'
 
 
-def val_rent(value):
-    if value < date.today():
+def past_rent(rent_date):
+    if rent_date < date.today():
         raise ValidationError(
             _('Enter a valid date.'),
-            params={"value": value},
+            params={'rent_date': rent_date},
         )
 
 
-def rent_length(value):
+def rent_length(rent_date):
     month = timedelta(days=30)
-    if value > date.today() + month:
+    if rent_date > date.today() + month:
         raise ValidationError(
             _('You can rent a car for a month maximum.'),
-            params={"value": value},
+            params={'rent_date': rent_date},
         )
 
 
-def future_rent(value):
+def future_rent(rent_date):
     two_weeks = timedelta(days=14)
-    if value > date.today() + two_weeks:
+    if rent_date > date.today() + two_weeks:
         raise ValidationError(
             _('You can rent a car for a maximum of two weeks in advance.'),
-            params={"value": value},
+            params={'rent_date': rent_date},
         )
 
 
-def val_offer_availab(value):
-    if Rent.objects.filter(offer=value).exists():
+def offer_available(vin_number):
+    if Rent.objects.filter(offer=vin_number).exists():
         raise ValidationError(
             _('This offer is already rented.'),
-            params={"value": value},
-        )
-
-
-def min_rent_length(value):
-    day = timedelta(hours=24)
-    if value < date.today() + day:
-        raise ValidationError(
-            _('You can rent a car for a day minimum.'),
-            params={"value": value},
+            params={'vin_number': vin_number},
         )
 
 
@@ -207,18 +213,11 @@ class Rent(models.Model):
     ]
 
     status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
-    rent_start = models.DateField(null=True, validators=[val_rent, future_rent])
-    rent_stop = models.DateField(null=True, validators=[val_rent, rent_length, min_rent_length])
+    rent_start = models.DateField(null=True, validators=[past_rent, future_rent, rent_length])
+    duration = models.PositiveIntegerField(validators=[MaxValueValidator(30)])
 
-    def duration(self):
-        duration = self.rent_stop - self.rent_start
-        max_rent = timedelta(days=30)
-        if duration > max_rent:
-            self.status = FINISHED
-        return duration
-
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, validators=[val_offer_availab])
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    offer = models.OneToOneField(Offer, on_delete=models.CASCADE, validators=[offer_available])
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Rent status: {self.status}, rent duration: ({self.rent_start} - {self.rent_stop}), offer: {self.offer}, user: {self.user}'
+        return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'

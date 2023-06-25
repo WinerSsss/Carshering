@@ -5,17 +5,18 @@ from django.views.generic.edit import CreateView
 from .models import Car, Offer, Rent
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.timezone import now
+from datetime import timedelta
 
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
-    fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'year_of_prod']
+    fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod']
     template_name = 'car_create.html'
     success_url = reverse_lazy('car_read')
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['year_of_prod'] = 'YYYY-MM-DD'
+        initial['date_of_prod'] = 'YYYY-MM-DD'
         return initial
 
     def form_valid(self, form):
@@ -75,7 +76,7 @@ class OfferReadView(LoginRequiredMixin, View):
 
 class RentCreateView(LoginRequiredMixin, CreateView):
     model = Rent
-    fields = ['rent_start', 'offer']
+    fields = ['rent_start', 'duration', 'offer']
     template_name = 'rent_create.html'
     success_url = reverse_lazy('rent_read')
 
@@ -88,17 +89,16 @@ class RentCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-
 class RentListView(LoginRequiredMixin, View):
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Rent.objects.all()
         else:
             return Rent.objects.filter(user=self.request.user)
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
     def get(self, request):
         rents = self.get_queryset()
