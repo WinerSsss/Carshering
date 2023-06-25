@@ -152,15 +152,6 @@ class Offer(models.Model):
         return f'Price: ({self.price}), car:({self.car})'
 
 
-ACTIVE = 'active'
-FINISHED = 'finished'
-
-STATUS_CHOICES = [
-    (ACTIVE, 'Rent active'),
-    (FINISHED, 'Rent finished'),
-]
-
-
 def val_rent(value):
     if value < date.today():
         raise ValidationError(
@@ -205,9 +196,20 @@ def min_rent_length(value):
 
 
 class Rent(models.Model):
+    ACTIVE = 'active'
+    FINISHED = 'finished'
+    OVERDUE = 'overdue'
+
+    STATUS_CHOICES = [
+        (ACTIVE, 'Rent active'),
+        (FINISHED, 'Rent finished'),
+        (OVERDUE, 'Rent overdue'),
+    ]
+
     status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
     rent_start = models.DateField(null=True, validators=[val_rent, future_rent])
     rent_stop = models.DateField(null=True, validators=[val_rent, rent_length, min_rent_length])
+    duration = models.DurationField(null=True, choices=STATUS_CHOICES, default=ACTIVE)
 
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE, validators=[val_offer_availab])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
