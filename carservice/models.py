@@ -162,7 +162,7 @@ class Offer(models.Model):
     price = models.FloatField(validators=[MinValueValidator(10.0)])
 
     car = models.OneToOneField(Car, on_delete=models.CASCADE, validators=[car_available])
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Price: ({self.price}), car:({self.car})'
