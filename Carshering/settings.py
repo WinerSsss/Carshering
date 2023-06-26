@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 import dotenv
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -133,4 +134,4 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-RENT_LENGTH_IN_DAYS = 30
+RENT_LENGTH_IN_DAYS = timedelta(days=30)
