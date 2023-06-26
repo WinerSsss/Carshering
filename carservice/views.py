@@ -108,4 +108,3 @@ class RentListView(LoginRequiredMixin, View):
             template_name='rent_read.html',
             context={'rents': rents}
         )
-      
