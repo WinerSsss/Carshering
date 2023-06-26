@@ -149,19 +149,11 @@ class Car(models.Model):
         return f'Model: {self.car_model, self.car_brand}, serial number:({self.serial_number})'
 
 
-def car_available(vin_number):
-    if Offer.objects.filter(car=vin_number).exists():
-        raise ValidationError(
-            _('This car is already offered.'),
-            params={'vin_number': vin_number},
-        )
-
-
 class Offer(models.Model):
     description = models.TextField()
     price = models.FloatField(validators=[MinValueValidator(10.0)])
 
-    car = models.OneToOneField(Car, on_delete=models.CASCADE, validators=[car_available])
+    car = models.OneToOneField(Car, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -177,7 +169,7 @@ def past_rent(rent_date):
 
 
 def rent_length(rent_date):
-    if rent_date > date.today() + RENT_LENGTH_IN_DAYS:
+    if rent_date > date.today() + timedelta(RENT_LENGTH_IN_DAYS):
         raise ValidationError(
             _('You can rent a car for a month maximum.'),
             params={'rent_date': rent_date},
@@ -190,14 +182,6 @@ def future_rent(rent_date):
         raise ValidationError(
             _('You can rent a car for a maximum of two weeks in advance.'),
             params={'rent_date': rent_date},
-        )
-
-
-def offer_available(vin_number):
-    if Rent.objects.filter(offer=vin_number).exists():
-        raise ValidationError(
-            _('This offer is already rented.'),
-            params={'vin_number': vin_number},
         )
 
 
@@ -216,8 +200,9 @@ class Rent(models.Model):
     rent_start = models.DateField(null=True, validators=[past_rent, future_rent, rent_length])
     duration = models.PositiveIntegerField(validators=[MaxValueValidator(30)])
 
-    offer = models.OneToOneField(Offer, on_delete=models.CASCADE, validators=[offer_available])
+    offer = models.OneToOneField(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'
+
