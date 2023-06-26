@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="home-title">
+    <a>Car{for}shering!</a>
+</div>
+<div>
+    <img src="{% static 'image/car.jpg' %}" class="img-home" alt="car">
+{% endblock body %}
