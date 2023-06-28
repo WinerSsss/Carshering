@@ -128,6 +128,7 @@ BRAND_CHOICES = (
 
 
 class Car(models.Model):
+    car_photo = models.ImageField(upload_to='static/image', null=True)
     serial_number = models.CharField(max_length=17, validators=[check_vin_number])
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
