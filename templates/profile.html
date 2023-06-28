@@ -1,21 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block content %}
-    <h2>Your profile: {{ user.username }}</h2>
+{% block body %}
+    <h4>Your profile: {{ user.username }}</h4>
     <p>Email   : {{ user.email }}</p>
     <p>Name: {{ user.first_name }}</p>
     <p>Surname: {{user.last_name }}</p>
     <a href="{% url 'edit_profile' %}">Edit your profile</a>
+    <a href="{% url 'car_create' %}">Add car</a>
 
-<!--    <h3>Change your profile</h3>-->
-<!--    <form method="post" action="{% url 'edit_profile' %}">-->
-<!--        {% csrf_token %}-->
-<!--        <label for="username">Username:</label>-->
-<!--        <input type="text" id="username" name="username" value="{{ user.username }}"><br>-->
-
-<!--        <label for="email">Email:</label>-->
-<!--        <input type="email" id="email" name="email" value="{{ user.email }}"><br>-->
-
-<!--        <input type="submit" value="Save">-->
-<!--    </form>-->
-{% endblock %}
+{% endblock body %}
