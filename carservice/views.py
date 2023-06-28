@@ -7,8 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.timezone import now
 from datetime import timedelta
 from django.utils import timezone
-from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
 
+from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
@@ -37,6 +37,9 @@ class CarReadView(LoginRequiredMixin, View):
         else:
             return Car.objects.filter(user=self.request.user)
 
+
+class CarReadView(LoginRequiredMixin, View):
+
     def get(self, request):
         cars = self.get_queryset()
         return render(
@@ -44,7 +47,8 @@ class CarReadView(LoginRequiredMixin, View):
             context={'cars': cars}
         )
 
-class CarUpdateView(View):
+
+class CarUpdateView(LoginRequiredMixin, View):
     def get(self, request, car_id):
         car = get_object_or_404(Car, pk=car_id)
         form = CarUpdateForm(instance=car)
@@ -59,7 +63,7 @@ class CarUpdateView(View):
         return render(request, 'car_update.html', {'form': form, 'car': car})
 
 
-class CarDeleteView(View):
+class CarDeleteView(LoginRequiredMixin, View):
     def get(self, request):
         cars = Car.objects.all()
         form = CarDeleteForm()
@@ -105,7 +109,7 @@ class OfferReadView(LoginRequiredMixin, View):
             context={'offers': Offer.objects.all()}
         )
 
-class OfferUpdateView(View):
+class OfferUpdateView(LoginRequiredMixin, View):
     def get(self, request, offer_id):
         offer = get_object_or_404(Offer, pk=offer_id)
         form = OfferUpdateForm(instance=offer)
@@ -120,7 +124,7 @@ class OfferUpdateView(View):
         return render(request, 'offer_update.html', {'form': form, 'offer': offer})
 
 
-class OfferDeleteView(View):
+class OfferDeleteView(LoginRequiredMixin, View):
     def get(self, request):
         offers = Offer.objects.all()
         form = OfferDeleteForm()
@@ -163,6 +167,9 @@ class RentListView(LoginRequiredMixin, View):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+
+class RentListView(View):
+
     def get(self, request):
         rents = self.get_queryset()
 
@@ -171,3 +178,32 @@ class RentListView(LoginRequiredMixin, View):
             template_name='rent_read.html',
             context={'rents': rents}
         )
+
+
+class RentUpdateView(LoginRequiredMixin, View):
+    def get(self, request, rent_id):
+        rent = get_object_or_404(Rent, id=rent_id)
+        form = RentUpdateForm(instance=rent)
+        return render(request, 'rent_update.html', {'form': form, 'rent': rent})
+
+    def post(self, request, rent_id):
+        rent = get_object_or_404(Rent, id=rent_id)
+        form = RentUpdateForm(request.POST, instance=rent)
+        if form.is_valid():
+            form.save()
+            return redirect('rent_read')
+        return render(request, 'rent_update.html', {'form': form, 'rent': rent})
+
+
+class RentDeleteView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = RentDeleteForm(user=request.user)
+        return render(request, 'rent_delete.html', {'form': form})
+
+    def post(self, request):
+        form = RentDeleteForm(request.user, request.POST)
+        if form.is_valid():
+            rent = form.cleaned_data['rent']
+            rent.delete()
+            return redirect('rent_read')
+        return render(request, 'rent_delete.html', {'form': form})
