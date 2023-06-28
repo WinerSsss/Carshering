@@ -31,7 +31,7 @@ class OfferDeleteForm(forms.Form):
 class RentUpdateForm(forms.ModelForm):
     class Meta:
         model = Rent
-        fields = ['status', 'rent_start', 'rent_stop', 'offer', 'user']
+        fields = ['status', 'rent_start', 'offer', 'user']
 
 class RentDeleteForm(forms.Form):
     def __init__(self, user, *args, **kwargs):
