@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
 <h1>Available rents:</h1>
   {% for rent in rents %}
     <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }} | {{ rent.offer }} | {{ rent.user }}</li>
   {% endfor %}
-</body>
-</html>
+{% endblock body %}

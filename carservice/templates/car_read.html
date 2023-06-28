@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
 <h1>Available cars:</h1>
 {% for car in cars %}
     <li>{{ car.car_brand }} {{ car.car_model }} {{ car.serial_number }} {{ car.date_of_prod }} {{ car.car_mileage }}</li>
 {% endfor %}
-</body>
-</html>
+{% endblock body %}
