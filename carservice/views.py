@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
-    fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'car_year']
+    fields = ['serial_number', 'car_mileage', 'car_model', 'car_year']
     template_name = 'car_create.html'
     success_url = reverse_lazy('car_read')
 

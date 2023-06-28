@@ -6,7 +6,7 @@ from django import forms
 class CarUpdateForm(forms.ModelForm):
     class Meta:
         model = Car
-        fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'car_year']
+        fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'car_year', "car_photo"]
 
 class CarDeleteForm(forms.Form):
     car = forms.ChoiceField(label='Car')
