@@ -91,14 +91,6 @@ def validate_year(prod_year):
         )
 
 
-def check_car_exists(car_number):
-    if Car.objects.filter(serial_number=car_number).exists():
-        raise ValidationError(
-            _('Car with this VIN number already exists.'),
-            params={'car_number': car_number},
-        )
-
-
 def validate_mileage(mileage):
     if mileage > 1000000:
         raise ValidationError(
@@ -136,7 +128,8 @@ BRAND_CHOICES = (
 
 
 class Car(models.Model):
-    serial_number = models.CharField(max_length=17, validators=[check_vin_number, check_car_exists])
+    car_photo = models.ImageField(upload_to='static/image', null=True)
+    serial_number = models.CharField(max_length=17, validators=[check_vin_number])
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
     car_model = models.CharField(max_length=30)

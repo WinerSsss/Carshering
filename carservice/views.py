@@ -7,12 +7,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.timezone import now
 from datetime import timedelta
 from django.utils import timezone
+from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
+from django.core.files.storage import FileSystemStorage
+
 
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
-    fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod']
+    fields = ['car_photo', 'serial_number', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod']
     template_name = 'car_create.html'
     success_url = reverse_lazy('car_read')
 
@@ -23,6 +26,10 @@ class CarCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        car_photo = form.cleaned_data['car_photo']
+        photo_save = FileSystemStorage()
+        photo_name = photo_save.save(car_photo.name, car_photo)
+        car_photo_url = photo_save.url(photo_name)
         return super().form_valid(form)
 
 
