@@ -45,14 +45,6 @@ class CarReadView(LoginRequiredMixin, View):
             return Car.objects.filter(user=self.request.user)
 
 
-class CarReadView(LoginRequiredMixin, View):
-
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Car.objects.all()
-        else:
-            return Car.objects.filter(user=self.request.user)
-
     def get(self, request):
         cars = self.get_queryset()
         return render(
