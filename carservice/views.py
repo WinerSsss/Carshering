@@ -10,6 +10,7 @@ from django.utils import timezone
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
@@ -87,25 +88,37 @@ class CarDeleteView(LoginRequiredMixin, View):
 
 def carsearch(request):
     search = request.GET.get('search')
-    cars = Car.objects.all()
-    offers = Offer.objects.all()
+    cars = Car.objects.none()
+    offers = Offer.objects.none()
+    message = ''
 
     if search:
         search_terms = search.split()
-        car_brand = search_terms[0]
-        car_model = search_terms[1] if len(search_terms) > 1 else ''
+        car_brand = ''
+        car_model = ''
 
-        cars = cars.filter(Q(car_brand__icontains=car_brand) | Q(car_model__icontains=car_brand))
-        offers = offers.filter(Q(car__car_brand__icontains=car_brand) | Q(car__car_model__icontains=car_brand))
+        if len(search_terms) > 0:
+            car_brand = search_terms[0]
+            if len(search_terms) > 1:
+                car_model = search_terms[1]
 
-        if car_model:
-            cars = cars.filter(car_model__icontains=car_model)
-            offers = offers.filter(car__car_model__icontains=car_model)
+        if car_brand and car_model:
+            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) & Q(car_model__iexact=car_model))
+            offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) & Q(car__car_model__iexact=car_model))
+        elif car_brand:
+            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) | Q(car_model__iexact=car_brand))
+            offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) | Q(car__car_model__iexact=car_brand))
+        else:
+            cars = Car.objects.filter(Q(car_model__iexact=car_model))
+            offers = Offer.objects.filter(Q(car__car_model__iexact=car_model))
+
+        if not cars.exists() and not offers.exists():
+            message = 'No results found!'
 
     context = {
         'cars': cars,
-        'search': search,
-        'offers': offers
+        'offers': offers,
+        'message': message
     }
     return render(request, 'car_search.html', context)
 
