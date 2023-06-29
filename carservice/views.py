@@ -10,9 +10,8 @@ from django.utils import timezone
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-
-
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
+
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
@@ -117,7 +116,8 @@ def carsearch(request):
     context = {
         'cars': cars,
         'offers': offers,
-        'message': message
+        'message': message,
+        'search': search
     }
     return render(request, 'car_search.html', context)
 
