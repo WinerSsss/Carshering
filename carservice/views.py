@@ -61,7 +61,7 @@ class CarUpdateView(LoginRequiredMixin, View):
 
     def post(self, request, car_id):
         car = get_object_or_404(Car, pk=car_id)
-        form = CarUpdateForm(request.POST, instance=car)
+        form = CarUpdateForm(request.POST, request.FILES, instance=car)
         if form.is_valid():
             form.save()
             return redirect('/car/read/')
