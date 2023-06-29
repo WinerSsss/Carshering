@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from .models import Car, Offer, Rent
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from datetime import timedelta
 from django.utils import timezone
@@ -83,7 +84,7 @@ class CarDeleteView(LoginRequiredMixin, View):
             return redirect('/car/read/')
         return render(request, 'car_delete.html', {'form': form})
 
-
+@login_required
 def carsearch(request):
     search = request.GET.get('search')
     cars = Car.objects.none()
@@ -121,7 +122,7 @@ def carsearch(request):
     }
     return render(request, 'car_search.html', context)
 
-
+@login_required
 def offer_result(request, car_id, offer_id):
     car = get_object_or_404(Car, pk=car_id)
     offer = get_object_or_404(Offer, pk=offer_id)
