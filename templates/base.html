@@ -45,9 +45,9 @@
             <a class="nav-link" href="{% url 'about' %}">About</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-light" style="color: black;" type="submit">Search</button>
+        <form class="d-flex" action="{% url 'carsearch' %}">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+            <button class="btn btn-outline-light" style="color: black;" type="submit">Search</button>
         </form>
       </div>
     </div>

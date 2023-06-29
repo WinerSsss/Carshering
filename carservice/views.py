@@ -9,6 +9,7 @@ from datetime import timedelta
 from django.utils import timezone
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
 from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
 
 
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
@@ -82,6 +83,38 @@ class CarDeleteView(LoginRequiredMixin, View):
             car.delete()
             return redirect('/car/read/')
         return render(request, 'car_delete.html', {'form': form})
+
+
+def carsearch(request):
+    search = request.GET.get('search')
+    cars = Car.objects.all()
+    offers = Offer.objects.all()
+
+    if search:
+        search_terms = search.split()
+        car_brand = search_terms[0]
+        car_model = search_terms[1] if len(search_terms) > 1 else ''
+
+        cars = cars.filter(Q(car_brand__icontains=car_brand) | Q(car_model__icontains=car_brand))
+        offers = offers.filter(Q(car__car_brand__icontains=car_brand) | Q(car__car_model__icontains=car_brand))
+
+        if car_model:
+            cars = cars.filter(car_model__icontains=car_model)
+            offers = offers.filter(car__car_model__icontains=car_model)
+
+    context = {
+        'cars': cars,
+        'search': search,
+        'offers': offers
+    }
+    return render(request, 'car_search.html', context)
+
+
+def offer_result(request, car_id, offer_id):
+    car = get_object_or_404(Car, pk=car_id)
+    offer = get_object_or_404(Offer, pk=offer_id)
+    context = {'car': car, 'offer': offer}
+    return render(request, 'offer_result.html', context)
 
 
 class OfferCreateView(LoginRequiredMixin, CreateView):
