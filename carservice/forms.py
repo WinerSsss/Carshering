@@ -4,6 +4,7 @@ from django import forms
 
 
 class CarUpdateForm(forms.ModelForm):
+    #image = forms.ImageField(label='New Car Image', required=False)
     class Meta:
         model = Car
         fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'car_model', "car_photo"]
@@ -39,3 +40,5 @@ class RentDeleteForm(forms.Form):
         self.fields['rent'].queryset = Rent.objects.filter(user=user)
 
     rent = forms.ModelChoiceField(queryset=Rent.objects.none())
+
+
