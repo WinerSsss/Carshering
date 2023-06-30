@@ -89,7 +89,6 @@ def carsearch(request):
     search = request.GET.get('search')
     cars = Car.objects.none()
     offers = Offer.objects.none()
-    message = ''
 
     if search:
         search_terms = search.split()
@@ -111,16 +110,13 @@ def carsearch(request):
             cars = Car.objects.filter(Q(car_model__iexact=car_model))
             offers = Offer.objects.filter(Q(car__car_model__iexact=car_model))
 
-        if not cars.exists() and not offers.exists():
-            message = 'No results found!'
-
     context = {
         'cars': cars,
         'offers': offers,
-        'message': message,
         'search': search
     }
     return render(request, 'car_search.html', context)
+
 
 @login_required
 def offer_result(request, car_id, offer_id):
