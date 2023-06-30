@@ -10,8 +10,13 @@ from datetime import timedelta
 from django.utils import timezone
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
 from django.core.files.storage import FileSystemStorage
-from django.db.models import Q
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics
+from .filters import CarFilter
+from .models import Car, Offer
+from .serializers import CarSerializer
+from django.db.models import Q
 
 
 class CarCreateView(LoginRequiredMixin, CreateView):
@@ -84,14 +89,16 @@ class CarDeleteView(LoginRequiredMixin, View):
             return redirect('/car/read/')
         return render(request, 'car_delete.html', {'form': form})
 
-@login_required
-def carsearch(request):
-    search = request.GET.get('search')
-    cars = Car.objects.none()
-    offers = Offer.objects.none()
 
-    if search:
-        search_terms = search.split()
+class CarSearchView(generics.ListAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_class = CarFilter
+
+    def get_queryset(self):
+        search_terms = self.request.GET.get('search', '').split()
+
         car_brand = ''
         car_model = ''
 
@@ -101,29 +108,13 @@ def carsearch(request):
                 car_model = search_terms[1]
 
         if car_brand and car_model:
-            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) & Q(car_model__iexact=car_model))
-            offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) & Q(car__car_model__iexact=car_model))
+            return Car.objects.filter(Q(car_brand__iexact=car_brand) & Q(car_model__iexact=car_model) | Q(car_brand__iexact=car_model) & Q(car_model__iexact=car_brand))
         elif car_brand:
-            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) | Q(car_model__iexact=car_brand))
-            offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) | Q(car__car_model__iexact=car_brand))
+            return Car.objects.filter(Q(car_brand__iexact=car_brand) | Q(car_model__iexact=car_brand))
+        elif car_model:
+            return Car.objects.filter(Q(car_model__iexact=car_model))
         else:
-            cars = Car.objects.filter(Q(car_model__iexact=car_model))
-            offers = Offer.objects.filter(Q(car__car_model__iexact=car_model))
-
-    context = {
-        'cars': cars,
-        'offers': offers,
-        'search': search
-    }
-    return render(request, 'car_search.html', context)
-
-
-@login_required
-def offer_result(request, car_id, offer_id):
-    car = get_object_or_404(Car, pk=car_id)
-    offer = get_object_or_404(Offer, pk=offer_id)
-    context = {'car': car, 'offer': offer}
-    return render(request, 'offer_result.html', context)
+            return Car.objects.none()
 
 
 class OfferCreateView(LoginRequiredMixin, CreateView):

@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block body %}
-  <h1>Offer Result</h1>
-  <p>Car: {{ car.car_brand }} {{ car.car_model }}  <img src="{{ car.car_photo.url }}"></p>
-  <p>Offer: {{ offer.price }} {{ offer.user }}</p>
-  <a href="{% url 'home' %}">Back to main page</a>
-{% endblock body %}
