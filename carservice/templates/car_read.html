@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
+    <a href="{% url 'car_create' %}">Add car</a>
+    <a href="{% url 'car_read' %}">Show yours cars</a>
+    <a href="{% url 'offer_read' %}">Show your offers</a>
 <h1>Available cars:</h1>
 {% for car in cars %}
 <li>
