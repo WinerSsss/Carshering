@@ -153,7 +153,7 @@ class OfferReadView(LoginRequiredMixin, View):
 
         return render(
             request, template_name='offer_read.html',
-            context={'offers': Offer.objects.all()}
+            context={'offers': offers}
         )
 
 class OfferUpdateView(LoginRequiredMixin, View):
