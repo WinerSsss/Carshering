@@ -216,8 +216,6 @@ class RentListView(LoginRequiredMixin, View):
         return super().form_valid(form)
 
 
-class RentListView(View):
-
     def get(self, request):
         rents = self.get_queryset()
 
