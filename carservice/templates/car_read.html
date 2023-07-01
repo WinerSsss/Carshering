@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <a href="{% url 'car_create' %}">Add car</a>
-    <a href="{% url 'car_read' %}">Show yours cars</a>
-    <a href="{% url 'offer_read' %}">Show your offers</a>
+    <button><a href="{% url 'car_create' %}">Add car</a></button>
+    <button><a href="{% url 'car_read' %}">Show yours cars</a></button>
+    <button><a href="{% url 'offer_read' %}">Show your offers</a></button>
+    <button><a href="{% url 'rent_read' %}">Show your rents</a></button>
 <h1>Available cars:</h1>
 {% for car in cars %}
 <li>

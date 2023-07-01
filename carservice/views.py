@@ -190,7 +190,7 @@ class OfferDeleteView(LoginRequiredMixin, View):
 
 class RentCreateView(LoginRequiredMixin, CreateView):
     model = Rent
-    fields = ['rent_start', 'duration', 'offer']
+    fields = ['rent_start', 'duration']
     template_name = 'rent_create.html'
     success_url = reverse_lazy('rent_read')
 
@@ -201,7 +201,19 @@ class RentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        offer_id = self.kwargs['offer_id']
+        offer = get_object_or_404(Offer, id=offer_id)
+        if Rent.objects.filter(offer=offer).exists():
+            return self.offer_already_rented_response(offer)
+        form.instance.offer = offer
         return super().form_valid(form)
+
+    def offer_already_rented_response(self, offer):
+        context = {
+            'message': 'This offer is already rented.',
+            'offer': offer,
+        }
+        return self.render_to_response(self.get_context_data(**context))
 
 
 class RentListView(LoginRequiredMixin, View):

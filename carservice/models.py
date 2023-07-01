@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime, date, timedelta
 from Carshering.settings import RENT_LENGTH_IN_DAYS
@@ -179,11 +180,13 @@ def future_rent(rent_date):
 
 
 class Rent(models.Model):
+    PENDING = 'pending'
     ACTIVE = 'active'
     FINISHED = 'finished'
     OVERDUE = 'overdue'
 
     STATUS_CHOICES = [
+        (PENDING, 'pending'),
         (ACTIVE, 'Rent active'),
         (FINISHED, 'Rent finished'),
         (OVERDUE, 'Rent overdue'),
@@ -195,6 +198,14 @@ class Rent(models.Model):
 
     offer = models.OneToOneField(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if self.rent_start > now().date():
+            self.status = self.PENDING
+        else:
+            self.status = self.ACTIVE
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'
