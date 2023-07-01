@@ -156,6 +156,7 @@ class OfferReadView(LoginRequiredMixin, View):
             context={'offers': offers}
         )
 
+
 class OfferUpdateView(LoginRequiredMixin, View):
     def get(self, request, offer_id):
         offer = get_object_or_404(Offer, pk=offer_id)
@@ -254,3 +255,8 @@ class RentDeleteView(LoginRequiredMixin, View):
             rent.delete()
             return redirect('rent_read')
         return render(request, 'rent_delete.html', {'form': form})
+
+
+def all_offers(request):
+    offers = Offer.objects.all()
+    return render(request, 'all_offers.html', {'offers': offers})
