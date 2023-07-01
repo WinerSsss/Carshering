@@ -7,8 +7,10 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
 from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
 
 from .forms import UserCreationForm, UserUpdateForm
+from carservice.models import Car
 
 
 class EditProfile(LoginRequiredMixin, View):
@@ -43,7 +45,7 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 
-class Register(View):
+class Register(FormView):
     template_name = 'registration/register.html'
 
     def get(self, request):
@@ -87,4 +89,5 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'reset_password/password_reset_complete.html'
+
 
