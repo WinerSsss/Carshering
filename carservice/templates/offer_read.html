@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block body %}
-<h1>Available offers:</h1>
-{% for offer in offers %}
-    <li>{{ offer.car }} {{ offer.price }} {{ offer.description }}</li>
-{% endfor %}
-{% endblock body %}
