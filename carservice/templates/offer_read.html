@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block body %}
 <h1>Available offers:</h1>
 {% for offer in offers %}
     <li>{{ offer.car }} {{ offer.price }} {{ offer.description }}</li>
 {% endfor %}
-</body>
-</html>
+{% endblock body%}

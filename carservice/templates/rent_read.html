@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block body %}
 <h1>Rents:</h1>
 {% for rent in rents %}
     <li>{{ rent.status }} {{ rent.rent_start }} {{ rent.rent_stop }} {{ rent.offer }} {{ rent.user }}</li>
 {% endfor %}
-</body>
-</html>
+{% endblock body%}

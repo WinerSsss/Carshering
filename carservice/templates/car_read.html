@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block body %}
 <h1>Available cars:</h1>
 {% for car in cars %}
     <li>{{ car.car_model }} {{ car.serial_number }} {{ car.car_year }} {{ car.car_mileage }}</li>
 {% endfor %}
-</body>
-</html>
+{% endblock body%}
