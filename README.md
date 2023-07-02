@@ -19,19 +19,15 @@ This is an application which allows users to rent or list personal car.
 3. Requirements
    - Once your virtual environment is activated and project is cloned you need to install requirements:
 
-           ```bash 
            pip install -r requirements.txt
-           ```
 
 ## Usage
 - To use this application you need to type (if you're in your workspace directory):
 
-        ```python
         python manage.py runserver
     or 
 
         python3 manage.py runserver
-        ```
 
 - After that you need to create an account to start using app.
 
