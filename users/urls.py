@@ -15,5 +15,5 @@ urlpatterns = [
     path('password_reset/done/', CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('profile/', profile, name='profile'),
     path('profile/edit/', EditProfile.as_view(), name='edit_profile'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

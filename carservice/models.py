@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from Carshering.settings import RENT_LENGTH_IN_DAYS
 
 
@@ -136,7 +136,6 @@ class Car(models.Model):
     date_of_prod = models.DateField(null=True, validators=[validate_year])
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
 
     def __str__(self):
         return f'Model: {self.car_model, self.car_brand}, serial number:({self.serial_number})'

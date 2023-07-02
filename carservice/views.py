@@ -44,7 +44,6 @@ class CarReadView(LoginRequiredMixin, View):
         else:
             return Car.objects.filter(user=self.request.user)
 
-
     def get(self, request):
         cars = self.get_queryset()
         return render(
@@ -113,6 +112,7 @@ class OfferReadView(LoginRequiredMixin, View):
             request, template_name='offer_read.html',
             context={'offers': Offer.objects.all()}
         )
+
 
 class OfferUpdateView(LoginRequiredMixin, View):
     def get(self, request, offer_id):
