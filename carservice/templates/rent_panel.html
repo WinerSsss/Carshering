@@ -2,11 +2,16 @@
 {% load static %}
 
 {% block body %}
-<center><h1>RENT PANEL</h1></center>
+<h1>Rent panel</h1>
   {% for rent in rents %}
     <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }}  | {{ rent.offer }}
-        <button>
-        <a href="{% url 'rent_detail' rent.id %}">Details</a>
-    </button></li>
+    <a href="{% url 'rent_detail' rent.id %}">
+        <button class="btn btn-secondary" style="margin: 0 20px 0 20px;">Details</button>
+    </a>
+    </li>
   {% endfor %}
 {% endblock body %}
+
+    <a href="{% url 'rent_detail' rent.id %}">
+        <button class="btn btn-secondary" style="margin: 0 20px 0 20px;">Details</button>
+    </a>

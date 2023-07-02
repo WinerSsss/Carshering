@@ -6,6 +6,6 @@
 {% block body %}
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Save offer">
+    <input class="btn btn-secondary" type="submit" value="Save offer">
 </form>
 {% endblock body%}
