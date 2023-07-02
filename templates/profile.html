@@ -11,8 +11,6 @@
     <p>First name: {{ user.first_name }}</p>
     <p>Last name: {{ user.last_name }}</p>
     <p>Location: {{ user.profile.location }}</p>
-    <a href="{% url 'edit_profile' %}">Edit your profile</a>
-    <a href="{% url 'car_read' %}">Renter profile</a>
     <a href="{% url 'edit_profile' %}">
         <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Edit your profile</button>
     </a>

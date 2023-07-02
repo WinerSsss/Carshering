@@ -1,31 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-
 {% block body %}
-  <h3>Edit Profile</h3>
-  <hr>
-  <form action="{% url 'edit_profile' %}" method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="form-group" style="margin: 10px;">
-        {{ field.label_tag }}
-        {{ field }}
-      </div>
-    {% endfor %}
-    <div class="form-group">
-      <button class="btn btn-secondary" type="submit">Save</button>
-    </div>
+    <h3>Edit Profile</h3>
   </form>
   <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ user_form }}
-  {{ profile_form }}
-  <button class="btn btn-outline-light" style="color: black;" type="submit">Save</button>
+  {{ user_form.username|as_crispy_field }}
+  {{ user_form.email|as_crispy_field }}
+  {{ user_form.first_name|as_crispy_field }}
+  {{ user_form.last_name|as_crispy_field }}
+  {{ profile_form.location|as_crispy_field }}
+  {{ profile_form.image|as_crispy_field }}
+  <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">SAVE</button>
 </form>
-
 {% endblock body %}
-
-    <a href="{% url 'edit_profile' %}">
-        <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Edit your profile</button>
-    </a>

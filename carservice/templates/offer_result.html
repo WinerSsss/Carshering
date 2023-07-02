@@ -2,9 +2,15 @@
 {% load static %}
 
 {% block body %}
-  <h1>Offer Result</h1>
-  <p>Car: {{ car.car_brand }} {{ car.car_model }}  <img src="{{ car.car_photo.url }}"></p>
-  <p>Offer: {{ offer.price }} {{ offer.user }}</p>
-  <button class="btn btn-secondary"><a href="{% url 'rent_create' offer.id %}">RENT</a></button>
-  <button class="btn btn-secondary"><a href="{% url 'home' %}">Back to main page</a></button>
+        <div style="margin: 20px 0 20px 0;">
+            <h1>Offer Result</h1>
+            <p>Car: {{ car.car_brand }} {{ car.car_model }} <img class="rounded float-start" style="display: flex; max-width: 200px;" src="{{ car.car_photo.url }}"></p>
+            <p>Offer: {{ offer.price }} {{ offer.user }}</p>
+            <a href="{% url 'rent_create' offer.id %}">
+           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">RENT</button>
+        </a>
+            <a href="{% url 'home' %}">
+           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">HOMEPAGE</button>
+        </a>
+        </div>
 {% endblock body %}

@@ -1,4 +1,4 @@
 Django == 4.2.2
 python-dotenv == 1.0.0
-crispy_forms
-crisy-bootstrap5
+crispy_forms == 2.0
+crisy-bootstrap5 == 0.7
