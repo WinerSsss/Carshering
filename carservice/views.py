@@ -270,3 +270,8 @@ class RentDeleteView(LoginRequiredMixin, View):
 def all_offers(request):
     offers = Offer.objects.all()
     return render(request, 'all_offers.html', {'offers': offers})
+
+
+def rent_panel(request):
+    rents = Rent.objects.all()
+    return render(request, 'rent_panel.html', {'rents': rents})
