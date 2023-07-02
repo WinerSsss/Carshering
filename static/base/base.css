@@ -12,9 +12,9 @@ body{
 
 .home-title{
     color: #808080;
-    font-weight: bold;
+    font-weight: normal;
     text-align: center;
-    font-size: 36px;
+    font-size: 50px;
     padding-top: 30px;
     padding-bottom: 30px;
 }

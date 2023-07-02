@@ -3,8 +3,16 @@
 
 {% block body %}
 <div class="home-title">
-    <a>Take&Drive</a>
+    <a>TAKE&DRIVE</a>
 </div>
 <div>
     <img src="{% static 'image/car.png' %}" class="img-home" alt="car">
+</div>
+
+<div>
+    <h4>Available cars:</h4>
+{% for rent in rents %}
+    <li>{{ rent.status }} {{ rent.rent_start }} {{ rent.rent_stop }} {{ rent.offer }} {{ rent.user }}</li>
+{% endfor %}
+</div>
 {% endblock body %}

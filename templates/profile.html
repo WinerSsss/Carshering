@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body %}
     <h4>Your profile: {{ user.username }}</h4>
     <p>Email   : {{ user.email }}</p>
     <p>First name: {{ user.first_name }}</p>
     <p>Last name: {{ user.last_name }}</p>
-    <button><a href="{% url 'edit_profile' %}">Edit your profile</a></button>
-    <button><a href="{% url 'car_read' %}">Renter profile</a></button>
+    <a href="{% url 'edit_profile' %}">Edit your profile</a>
+    <a href="{% url 'car_read' %}">Renter profile</a>
 {% endblock body %}

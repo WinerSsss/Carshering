@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body %}
     <a href="{% url 'offer_create' %}">Create offer</a>
@@ -9,4 +10,4 @@
 {% for offer in offers %}
     <li>{{ offer.car }} {{ offer.price }} {{ offer.description }}</li>
 {% endfor %}
-{% endblock body %}
+{% endblock body%}
