@@ -32,4 +32,4 @@ urlpatterns = [
     path('rent/delete/', RentDeleteView.as_view(), name='rent_delete'),
     path('rent_detail/<int:rent_id>/', rent_detail, name='rent_detail'),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

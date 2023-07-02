@@ -17,6 +17,13 @@
       <button class="btn btn-secondary" type="submit">Save</button>
     </div>
   </form>
+  <form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ user_form }}
+  {{ profile_form }}
+  <button class="btn btn-outline-light" style="color: black;" type="submit">Save</button>
+</form>
+
 {% endblock body %}
 
     <a href="{% url 'edit_profile' %}">

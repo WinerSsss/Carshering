@@ -1,5 +1,6 @@
 {% load static %}
 <!doctype html>
+
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -55,6 +56,12 @@
             <input class="form-control me-2" type="search" placeholder="Search cars" aria-label="Search" name="search">
             <button class="btn btn-outline-light" style="color: black;" type="submit">Search</button>
         </form>
+          <div>
+              {% if user.profile.image %}
+                <img  style="vertical-align: middle; width: 50px; height:50px; border-radius: 50%; margin-left: 10px; margin-right: 10px;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar">
+              {% endif %}
+
+          </div>
       </div>
     </div>
   </nav>

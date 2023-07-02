@@ -4,9 +4,15 @@
 
 {% block body %}
     <h4 style="margin-top: 20px;">Your profile: {{ user.username }}</h4>
+    {% if user.profile.image %}
+    <img style="border: 5px solid #555; vertical-align: middle; width: 200px; height:200px; border-radius: 50%;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar">
+    {% endif %}
     <p>Email   : {{ user.email }}</p>
     <p>First name: {{ user.first_name }}</p>
     <p>Last name: {{ user.last_name }}</p>
+    <p>Location: {{ user.profile.location }}</p>
+    <a href="{% url 'edit_profile' %}">Edit your profile</a>
+    <a href="{% url 'car_read' %}">Renter profile</a>
     <a href="{% url 'edit_profile' %}">
         <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Edit your profile</button>
     </a>

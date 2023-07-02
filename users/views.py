@@ -9,38 +9,46 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmVie
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 
-from .forms import UserCreationForm, UserUpdateForm
-from carservice.models import Car
+from .models import Profile
+from .forms import UserCreationForm, UserUpdateForm, ProfileUpdate
 
 
 class EditProfile(LoginRequiredMixin, View):
     template_name = 'edit_profile.html'
 
     def get(self, request):
-        form = UserUpdateForm(instance=request.user)
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdate(instance=request.user.profile)
         context = {
-            'form': form
+            'profile_form': profile_form,
+            'user_form': user_form,
+
         }
         return render(request, self.template_name, context)
 
     def post(self, request):
-        form = UserUpdateForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdate(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
             messages.success(request, 'Your profile was successfully changed.')
             return redirect('profile')
 
         context = {
-            'form': form
+            'profile_form': profile_form,
+            'user_form': user_form,
         }
         return render(request, self.template_name, context)
+
 
 
 @login_required
 def profile(request):
     user = request.user
     context = {
-        'user': user
+        'user': user,
+        'profile': profile,
     }
     return render(request, 'profile.html', context)
 
@@ -50,7 +58,7 @@ class Register(FormView):
 
     def get(self, request):
         context = {
-            'form': UserCreationForm()
+            'form': UserCreationForm(),
         }
         return render(request, self.template_name, context)
 
@@ -62,6 +70,7 @@ class Register(FormView):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
+            Profile.objects.create(user=user)
             login(request, user)
             return redirect('home')
         context = {

@@ -45,7 +45,6 @@ class CarReadView(LoginRequiredMixin, View):
         else:
             return Car.objects.filter(user=self.request.user)
 
-
     def get(self, request):
         cars = self.get_queryset()
         return render(
