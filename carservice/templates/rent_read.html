@@ -4,6 +4,6 @@
 {% block body %}
 <h1>My rents:</h1>
   {% for rent in rents %}
-    <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }} | {{ rent.offer }} | {{ rent.user }}</li>
+    <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }}  | {{ rent.offer }} | Rented from: {{ rent.user }} | END AT: {{ rent.rent_end }}</li>
   {% endfor %}
 {% endblock body %}
