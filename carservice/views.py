@@ -192,7 +192,7 @@ class RentCreateView(LoginRequiredMixin, CreateView):
     model = Rent
     fields = ['rent_start', 'duration']
     template_name = 'rent_create.html'
-    success_url = reverse_lazy('rent_read')
+    success_url = reverse_lazy('rent_panel')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -270,3 +270,14 @@ class RentDeleteView(LoginRequiredMixin, View):
 def all_offers(request):
     offers = Offer.objects.all()
     return render(request, 'all_offers.html', {'offers': offers})
+
+
+def rent_panel(request):
+    rents = Rent.objects.all()
+    return render(request, 'rent_panel.html', {'rents': rents})
+
+
+def rent_detail(request, rent_id):
+    rent = get_object_or_404(Rent, id=rent_id)
+    offer = rent.offer
+    return render(request, 'rent_detail.html', {'rent': rent, 'offer': offer})

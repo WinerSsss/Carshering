@@ -192,14 +192,17 @@ class Rent(models.Model):
         (OVERDUE, 'Rent overdue'),
     ]
 
+
     status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
     rent_start = models.DateField(null=True, validators=[past_rent, future_rent, rent_length])
     duration = models.PositiveIntegerField(validators=[MaxValueValidator(30)])
-
-    offer = models.OneToOneField(Offer, on_delete=models.CASCADE)
+    rent_end = models.DateField(null=True, validators=[past_rent])
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
+
     def save(self, *args, **kwargs):
+        self.rent_end = self.rent_start + timedelta(days=self.duration)
         if self.rent_start > now().date():
             self.status = self.PENDING
         else:

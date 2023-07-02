@@ -5,7 +5,8 @@ from django.views.generic import TemplateView
 from django.conf.urls.static import static
 
 from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView, \
-    CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView, RentUpdateView, RentDeleteView, carsearch, offer_result, all_offers
+    CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView, RentUpdateView, RentDeleteView, carsearch, offer_result, all_offers, rent_panel, \
+    rent_detail
 
 
 urlpatterns = [
@@ -26,8 +27,9 @@ urlpatterns = [
     path('offer/delete/', OfferDeleteView.as_view(), name='offer_car'),
     path('rent/create/<int:offer_id>/', RentCreateView.as_view(), name='rent_create'),
     path('rent/read/', RentListView.as_view(), name='rent_read'),
-
+    path('rent_panel', rent_panel, name='rent_panel'),
     path('rent/update/<int:rent_id>/',RentUpdateView.as_view(),name='rent_update'),
     path('rent/delete/', RentDeleteView.as_view(), name='rent_delete'),
+    path('rent_detail/<int:rent_id>/', rent_detail, name='rent_detail'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

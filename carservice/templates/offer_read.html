@@ -8,6 +8,6 @@
     <a href="{% url 'offer_read' %}">Show your offers</a>
 <h1>Available offers:</h1>
 {% for offer in offers %}
-    <li>{{ offer.car }} {{ offer.price }} {{ offer.description }}</li>
+    <li>{{ offer.car }}, {{ offer.price }} PLN, {{ offer.description }}</li>
 {% endfor %}
 {% endblock body%}
