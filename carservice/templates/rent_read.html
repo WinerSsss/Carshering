@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-<h1>Available rents:</h1>
+<h1>My rents:</h1>
   {% for rent in rents %}
     <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }} | {{ rent.offer }} | {{ rent.user }}</li>
   {% endfor %}

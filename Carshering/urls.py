@@ -24,7 +24,7 @@ urlpatterns = [
     path('offer/result/<int:car_id>/<int:offer_id>/', offer_result, name='offer_result'),
     path('offer/update/<int:offer_id>/', OfferUpdateView.as_view(), name='offer_read'),
     path('offer/delete/', OfferDeleteView.as_view(), name='offer_car'),
-    path('rent/create/', RentCreateView.as_view()),
+    path('rent/create/<int:offer_id>/', RentCreateView.as_view(), name='rent_create'),
     path('rent/read/', RentListView.as_view(), name='rent_read'),
 
     path('rent/update/<int:rent_id>/',RentUpdateView.as_view(),name='rent_update'),
