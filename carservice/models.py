@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from datetime import date, timedelta
 from Carshering.settings import RENT_LENGTH_IN_DAYS
@@ -129,7 +130,7 @@ BRAND_CHOICES = (
 
 class Car(models.Model):
     car_photo = models.ImageField(upload_to='static/image', null=True)
-    serial_number = models.CharField(max_length=17, validators=[check_vin_number])
+    serial_number = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
     car_model = models.CharField(max_length=30)
@@ -178,22 +179,35 @@ def future_rent(rent_date):
 
 
 class Rent(models.Model):
+    PENDING = 'pending'
     ACTIVE = 'active'
     FINISHED = 'finished'
     OVERDUE = 'overdue'
 
     STATUS_CHOICES = [
+        (PENDING, 'pending'),
         (ACTIVE, 'Rent active'),
         (FINISHED, 'Rent finished'),
         (OVERDUE, 'Rent overdue'),
     ]
 
+
     status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
     rent_start = models.DateField(null=True, validators=[past_rent, future_rent, rent_length])
     duration = models.PositiveIntegerField(validators=[MaxValueValidator(30)])
-
-    offer = models.OneToOneField(Offer, on_delete=models.CASCADE)
+    rent_end = models.DateField(null=True, validators=[past_rent])
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+
+
+    def save(self, *args, **kwargs):
+        self.rent_end = self.rent_start + timedelta(days=self.duration)
+        if self.rent_start > now().date():
+            self.status = self.PENDING
+        else:
+            self.status = self.ACTIVE
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'

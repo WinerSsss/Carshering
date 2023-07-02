@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<center><h1>RENT PANEL</h1></center>
+  {% for rent in rents %}
+    <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }}  | {{ rent.offer }}
+        <button>
+        <a href="{% url 'rent_detail' rent.id %}">Details</a>
+    </button></li>
+  {% endfor %}
+{% endblock body %}

@@ -4,14 +4,15 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from .models import Car, Offer, Rent
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from datetime import timedelta
 from django.utils import timezone
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
 from django.core.files.storage import FileSystemStorage
-
-
+from django.db.models import Q
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
+
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
@@ -82,6 +83,47 @@ class CarDeleteView(LoginRequiredMixin, View):
             return redirect('/car/read/')
         return render(request, 'car_delete.html', {'form': form})
 
+@login_required
+def carsearch(request):
+    search = request.GET.get('search')
+    cars = Car.objects.none()
+    offers = Offer.objects.none()
+
+    if search:
+        search_terms = search.split()
+        car_brand = ''
+        car_model = ''
+
+        if len(search_terms) > 0:
+            car_brand = search_terms[0]
+            if len(search_terms) > 1:
+                car_model = search_terms[1]
+
+        if car_brand and car_model:
+            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) & Q(car_model__iexact=car_model))
+            offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) & Q(car__car_model__iexact=car_model))
+        elif car_brand:
+            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) | Q(car_model__iexact=car_brand))
+            offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) | Q(car__car_model__iexact=car_brand))
+        else:
+            cars = Car.objects.filter(Q(car_model__iexact=car_model))
+            offers = Offer.objects.filter(Q(car__car_model__iexact=car_model))
+
+    context = {
+        'cars': cars,
+        'offers': offers,
+        'search': search
+    }
+    return render(request, 'car_search.html', context)
+
+
+@login_required
+def offer_result(request, car_id, offer_id):
+    car = get_object_or_404(Car, pk=car_id)
+    offer = get_object_or_404(Offer, pk=offer_id)
+    context = {'car': car, 'offer': offer}
+    return render(request, 'offer_result.html', context)
+
 
 class OfferCreateView(LoginRequiredMixin, CreateView):
     model = Offer
@@ -110,7 +152,7 @@ class OfferReadView(LoginRequiredMixin, View):
 
         return render(
             request, template_name='offer_read.html',
-            context={'offers': Offer.objects.all()}
+            context={'offers': offers}
         )
 
 
@@ -147,9 +189,9 @@ class OfferDeleteView(LoginRequiredMixin, View):
 
 class RentCreateView(LoginRequiredMixin, CreateView):
     model = Rent
-    fields = ['rent_start', 'duration', 'offer']
+    fields = ['rent_start', 'duration']
     template_name = 'rent_create.html'
-    success_url = reverse_lazy('rent_read')
+    success_url = reverse_lazy('rent_panel')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -158,7 +200,19 @@ class RentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        offer_id = self.kwargs['offer_id']
+        offer = get_object_or_404(Offer, id=offer_id)
+        if Rent.objects.filter(offer=offer).exists():
+            return self.offer_already_rented_response(offer)
+        form.instance.offer = offer
         return super().form_valid(form)
+
+    def offer_already_rented_response(self, offer):
+        context = {
+            'message': 'This offer is already rented.',
+            'offer': offer,
+        }
+        return self.render_to_response(self.get_context_data(**context))
 
 
 class RentListView(LoginRequiredMixin, View):
@@ -172,8 +226,6 @@ class RentListView(LoginRequiredMixin, View):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-
-class RentListView(View):
 
     def get(self, request):
         rents = self.get_queryset()
@@ -212,3 +264,19 @@ class RentDeleteView(LoginRequiredMixin, View):
             rent.delete()
             return redirect('rent_read')
         return render(request, 'rent_delete.html', {'form': form})
+
+
+def all_offers(request):
+    offers = Offer.objects.all()
+    return render(request, 'all_offers.html', {'offers': offers})
+
+
+def rent_panel(request):
+    rents = Rent.objects.all()
+    return render(request, 'rent_panel.html', {'rents': rents})
+
+
+def rent_detail(request, rent_id):
+    rent = get_object_or_404(Rent, id=rent_id)
+    offer = rent.offer
+    return render(request, 'rent_detail.html', {'rent': rent, 'offer': offer})

@@ -42,15 +42,17 @@
             <a class="nav-link" href="{% url 'register' %}">Register</a>
           </li>
           {% endif %}
-            <a class="nav-link" href="{% url 'about' %}">About</a>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about' %}">About</a> </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'all_offers' %}">Offers</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'rent_panel' %}">Rent Panel</a>
           </li>
-
         </ul>
-
-
-        <form class="d-flex" >
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-light" style="color: black;" type="submit">Search</button>
+        <form class="d-flex" action="{% url 'carsearch' %}">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+            <button class="btn btn-outline-light" style="color: black;" type="submit">Search</button>
         </form>
           <div>
               {% if user.profile.image %}
@@ -62,10 +64,15 @@
     </div>
   </nav>
   {% endblock navbar %}
-  {% block body %}
-
-  {% endblock body %}
-  <footer class="bg-light text-center text-lg-start">
+  <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-10">
+          {% block body %}
+          {% endblock body%}
+        </div>
+      </div>
+  </div>
+  <footer class="bg-light text-center text-lg-start" style="margin-top: 30px;">
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: #808080; color: white;">
       © 2023 Copyright:
