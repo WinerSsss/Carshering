@@ -130,7 +130,7 @@ BRAND_CHOICES = (
 
 class Car(models.Model):
     car_photo = models.ImageField(upload_to='static/image', null=True)
-    serial_number = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
+    vin_number = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
     car_model = models.CharField(max_length=30)
@@ -139,7 +139,7 @@ class Car(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Model: {self.car_model, self.car_brand}, serial number:({self.serial_number})'
+        return f'Model: {self.car_model, self.car_brand}, vin number:({self.vin_number})'
 
 
 class Offer(models.Model):

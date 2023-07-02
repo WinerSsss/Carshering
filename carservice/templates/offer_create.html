@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-
-
 {% block body %}
+<h3>Create offer:</h3>
 <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input class="btn btn-secondary" type="submit" value="Save offer">
+    {{ form.description|as_crispy_field }}
+    {{ form.price|as_crispy_field }}
+    {{ form.car|as_crispy_field }}
+    <input class="btn btn-secondary" type="submit" value="CREATE">
 </form>
 {% endblock body%}

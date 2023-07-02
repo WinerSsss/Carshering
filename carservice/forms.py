@@ -4,10 +4,9 @@ from django import forms
 
 
 class CarUpdateForm(forms.ModelForm):
-    #image = forms.ImageField(label='New Car Image', required=False)
     class Meta:
         model = Car
-        fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'car_model', "car_photo"]
+        fields = ['vin_number', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod', "car_photo"]
 
 
 class CarDeleteForm(forms.Form):

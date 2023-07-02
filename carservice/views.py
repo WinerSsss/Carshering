@@ -12,11 +12,12 @@ from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteFo
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
+from django.views.generic import DeleteView
 
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
-    fields = ['car_photo', 'serial_number', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod']
+    fields = ['car_photo', 'vin_number', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod']
     template_name = 'car_create.html'
     success_url = reverse_lazy('car_read')
 
@@ -54,6 +55,7 @@ class CarReadView(LoginRequiredMixin, View):
 
 
 class CarUpdateView(LoginRequiredMixin, View):
+    success_url = reverse_lazy('car_read')
     def get(self, request, car_id):
         car = get_object_or_404(Car, pk=car_id)
         form = CarUpdateForm(instance=car)
@@ -64,24 +66,19 @@ class CarUpdateView(LoginRequiredMixin, View):
         form = CarUpdateForm(request.POST, request.FILES, instance=car)
         if form.is_valid():
             form.save()
-            return redirect('/car/read/')
+            return redirect('car_read')
         return render(request, 'car_update.html', {'form': form, 'car': car})
 
 
-class CarDeleteView(LoginRequiredMixin, View):
-    def get(self, request):
-        cars = Car.objects.all()
-        form = CarDeleteForm()
-        return render(request, 'car_delete.html', {'form': form, 'cars': cars})
+class CarDeleteView(LoginRequiredMixin, DeleteView):
+    model = Car
+    success_url = reverse_lazy('car_read')
+    template_name = 'car_delete.html'
 
-    def post(self, request):
-        form = CarDeleteForm(request.POST)
-        if form.is_valid():
-            car_id = form.cleaned_data['car']
-            car = Car.objects.get(id=car_id)
-            car.delete()
-            return redirect('/car/read/')
-        return render(request, 'car_delete.html', {'form': form})
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
+
 
 @login_required
 def carsearch(request):
@@ -157,6 +154,8 @@ class OfferReadView(LoginRequiredMixin, View):
 
 
 class OfferUpdateView(LoginRequiredMixin, View):
+    success_url = reverse_lazy('offer_read')
+
     def get(self, request, offer_id):
         offer = get_object_or_404(Offer, pk=offer_id)
         form = OfferUpdateForm(instance=offer)
@@ -167,24 +166,19 @@ class OfferUpdateView(LoginRequiredMixin, View):
         form = OfferUpdateForm(request.POST, instance=offer)
         if form.is_valid():
             form.save()
-            return redirect('/offer/read/')
+            return redirect(self.success_url)
         return render(request, 'offer_update.html', {'form': form, 'offer': offer})
 
 
-class OfferDeleteView(LoginRequiredMixin, View):
-    def get(self, request):
-        offers = Offer.objects.all()
-        form = OfferDeleteForm()
-        return render(request, 'offer_delete.html', {'form': form, 'offers': offers})
 
-    def post(self, request):
-        form = OfferDeleteForm(request.POST)
-        if form.is_valid():
-            offer_id = form.cleaned_data['offer']
-            offer = Offer.objects.get(id=offer_id)
-            offer.delete()
-            return redirect('/offer/read/')
-        return render(request, 'offer_delete.html', {'form': form})
+class OfferDeleteView(LoginRequiredMixin, DeleteView):
+    model = Offer
+    success_url = reverse_lazy('offer_read')
+    template_name = 'offer_delete.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.request.user)
 
 
 class RentCreateView(LoginRequiredMixin, CreateView):

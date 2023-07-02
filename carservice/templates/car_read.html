@@ -13,13 +13,9 @@
         <a href="{% url 'offer_read' %}">
            <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</button>
         </a>
-        <a href="{% url 'rent_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your rents</button>
-        </a>
     </div>
 <h1>Available cars:</h1>
 {% for car in cars %}
-
 <li>
 {% if car.car_photo %}
     <img class="rounded float-start" style="display: flex; max-width: 200px;" src="{{ car.car_photo.url }}">
@@ -28,5 +24,11 @@
 {% endif %}
         {{ car.car_brand }} {{ car.car_model }} {{ car.serial_number }} {{ car.date_of_prod }} {{ car.car_mileage }}
 </li>
+<a href="{% url 'update_car' car_id=car.id %}">
+    <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</button>
+</a>
+<a href="{% url 'delete_car' pk=car.id %}">
+    <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">DELETE</button>
+</a>
 {% endfor %}
 {% endblock body %}
