@@ -8,13 +8,17 @@
   <form action="{% url 'edit_profile' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
-      <div class="form-group">
+      <div class="form-group" style="margin: 10px;">
         {{ field.label_tag }}
         {{ field }}
       </div>
     {% endfor %}
     <div class="form-group">
-      <button class="btn btn-outline-light" style="color: black;" type="submit">Save</button>
+      <button class="btn btn-secondary" type="submit">Save</button>
     </div>
   </form>
 {% endblock body %}
+
+    <a href="{% url 'edit_profile' %}">
+        <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Edit your profile</button>
+    </a>

@@ -11,8 +11,10 @@
 
 <div>
     <h4>Available cars:</h4>
-{% for rent in rents %}
-    <li>{{ rent.status }} {{ rent.rent_start }} {{ rent.rent_stop }} {{ rent.offer }} {{ rent.user }}</li>
+{% for offer in offers %}
+    {% if not offer.rent %}
+        <li>{{ offer.car }} {{ offer.price }} {{ offer.description }} {{ offer.user }} {{ rent.status }}</li>
+    {% endif %}
 {% endfor %}
 </div>
 {% endblock body %}

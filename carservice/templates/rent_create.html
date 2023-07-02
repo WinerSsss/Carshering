@@ -7,21 +7,23 @@
 {% block content %}
 {% if message %}
   <p>{{ message }}</p>
- <button><a href="{% url 'all_offers' %}">Back</a></button>
+ <button class="btn btn-secondary"><a href="{% url 'all_offers' %}">Back</a></button>
   <br><br>
   {% if not message == "This offer is already rented." %}
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <input type="submit" value="Submit">
+      <input type="submit" class="btn btn-secondary" value="Submit">
     </form>
   {% endif %}
 {% else %}
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Submit">
-    <button><a href="{% url 'all_offers' %}">Back</a></button>
+    <input type="submit" class="btn btn-secondary" value="Submit">
+    <a href="{% url 'offer_read' %}">
+        <button class="btn btn-secondary" style="margin: 0 20px 0 20px;">Back</button>
+    </a>
   </form>
 {% endif %}
 
