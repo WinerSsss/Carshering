@@ -42,9 +42,11 @@
           </li>
           {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">About</a>
-        <a class="nav-link" href="{% url 'all_offers' %}">Offers</a>
-        <a class="nav-link" href="{% url 'rent_panel' %}">Rent Panel</a>
+            <a class="nav-link" href="{% url 'about' %}">About</a> </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'all_offers' %}">Offers</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'rent_panel' %}">Rent Panel</a>
           </li>
         </ul>
         <form class="d-flex" action="{% url 'carsearch' %}">
