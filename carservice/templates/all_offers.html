@@ -5,7 +5,11 @@
 <h1>Available offers:</h1>
 {% for offer in offers %}
     {% if not offer.rent %}
-        <li>{{ offer.car }} {{ offer.price }} {{ offer.description }} {{ offer.user }} <button><a href="{% url 'rent_create' offer.id %}">RENT</a></button></li>
+        <li>{{ offer.car }} {{ offer.price }} {{ offer.description }} {{ offer.user }}
+            <a href="{% url 'rent_create' offer.id %}">
+                <button type="submit" class="btn btn-secondary">RENT</button>
+            </a>
+        </li>
     {% endif %}
 {% endfor %}
 {% endblock body %}

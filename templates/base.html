@@ -12,7 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static '/base/base.css' %}">
 
-    <title>{% block title %}Home Page{% endblock title %}</title>
+    <title>{% block title %}TAKE&DRIVE{% endblock title %}</title>
   </head>
   <body>
   {% block navbar %}
@@ -43,15 +43,17 @@
           </li>
           {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">About</a> </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'all_offers' %}">Offers</a></li>
-        <li class="nav-item">
+            <a class="nav-link" href="{% url 'all_offers' %}">Offers</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'rent_panel' %}">Rent Panel</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about' %}">About</a>
+          <li class="nav-item">
         </ul>
         <form class="d-flex" action="{% url 'carsearch' %}">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+            <input class="form-control me-2" type="search" placeholder="Search cars" aria-label="Search" name="search">
             <button class="btn btn-outline-light" style="color: black;" type="submit">Search</button>
         </form>
           <div>

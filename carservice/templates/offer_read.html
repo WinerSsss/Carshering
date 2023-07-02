@@ -3,9 +3,17 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <a href="{% url 'offer_create' %}">Create offer</a>
-    <a href="{% url 'car_read' %}">Show yours cars</a>
-    <a href="{% url 'offer_read' %}">Show your offers</a>
+    <div style="margin: 20px 0 20px 0;">
+        <a href="{% url 'offer_create' %}">
+           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Create offer</button>
+        </a>
+        <a href="{% url 'car_read' %}">
+           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show yours cars</button>
+        </a>
+        <a href="{% url 'offer_read' %}">
+           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</button>
+        </a>
+    </div>
 <h1>Available offers:</h1>
 {% for offer in offers %}
     <li>{{ offer.car }}, {{ offer.price }} PLN, {{ offer.description }}</li>
