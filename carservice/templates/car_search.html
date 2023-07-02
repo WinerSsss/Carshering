@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+  {% if cars %}
+    <ul>
+      {% for car in cars %}
+        <li>
+          {{ car.car_brand }} {{ car.car_model }}
+          <ul>
+            {% for offer in offers %}
+              {% if offer.car_id == car.id %}
+                  <a href="{% url 'offer_result' car_id=car.pk offer_id=offer.pk %}">{{ offer.car }} {{ offer.price }} {{ offer.user }}</a>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No result for {{ search }}.</p>
+  {% endif %}
+{% endblock body %}
+

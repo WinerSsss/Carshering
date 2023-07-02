@@ -4,8 +4,26 @@
 
 
 {% block body %}
-<form method="post">{% csrf_token %}
+{% block content %}
+{% if message %}
+  <p>{{ message }}</p>
+ <button><a href="{% url 'all_offers' %}">Back</a></button>
+  <br><br>
+  {% if not message == "This offer is already rented." %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Submit">
+    </form>
+  {% endif %}
+{% else %}
+  <form method="post">
+    {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit">
-</form>
-{% endblock body%}
+    <button><a href="{% url 'all_offers' %}">Back</a></button>
+  </form>
+{% endif %}
+
+{% endblock %}
+{% endblock body %}

@@ -2,10 +2,19 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-
 {% block body %}
+    <button><a href="{% url 'car_create' %}">Add car</a></button>
+    <button><a href="{% url 'car_read' %}">Show yours cars</a></button>
+    <button><a href="{% url 'offer_read' %}">Show your offers</a></button>
+    <button><a href="{% url 'rent_read' %}">Show your rents</a></button>
 <h1>Available cars:</h1>
 {% for car in cars %}
-    <li>{{ car.car_model }} {{ car.serial_number }} {{ car.car_year }} {{ car.car_mileage }}</li>
+<li>
+{% if car.car_photo %}
+    <img src="{{ car.car_photo.url }}">
+{% else %}
+    <p>No photo available</p>
+{% endif %}
+        {{ car.car_brand }} {{ car.car_model }} {{ car.serial_number }} {{ car.date_of_prod }} {{ car.car_mileage }}</li>
 {% endfor %}
-{% endblock body%}
+{% endblock body %}

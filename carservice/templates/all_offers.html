@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <button><a href="{% url 'offer_create' %}">Create offer</a></button>
+    <button><a href="{% url 'offer_read' %}">Show your offers</a></button>
+    <button><a href="{% url 'rent_read' %}">Show your rents</a></button>
+<h1>Available offers:</h1>
+{% for offer in offers %}
+    <li>{{ offer.car }} {{ offer.price }} {{ offer.description }} {{ offer.user }} <button><a href="{% url 'rent_create' offer.id %}">RENT</a></button></li>
+{% endfor %}
+{% endblock body %}

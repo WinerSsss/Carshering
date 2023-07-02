@@ -1,12 +1,14 @@
-from . models import Car, Offer
+from . models import Car, Offer, Rent
 from django import forms
 
 
 
 class CarUpdateForm(forms.ModelForm):
+    #image = forms.ImageField(label='New Car Image', required=False)
     class Meta:
         model = Car
-        fields = ['serial_number', 'car_mileage', 'car_model', 'car_year']
+        fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'car_model', "car_photo"]
+
 
 class CarDeleteForm(forms.Form):
     car = forms.ChoiceField(label='Car')
@@ -26,3 +28,17 @@ class OfferDeleteForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['offer'].choices = [(offer.id, str(offer)) for offer in Offer.objects.all()]
+
+class RentUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Rent
+        fields = ['status', 'rent_start', 'offer', 'user']
+
+class RentDeleteForm(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        super(RentDeleteForm, self).__init__(*args, **kwargs)
+        self.fields['rent'].queryset = Rent.objects.filter(user=user)
+
+    rent = forms.ModelChoiceField(queryset=Rent.objects.none())
+
+

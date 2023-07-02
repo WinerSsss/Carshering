@@ -1,32 +1,39 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import UserCreationForm
-from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetDoneView
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+
+from .forms import UserCreationForm, UserUpdateForm
+from carservice.models import Car
 
 
-@login_required
-def edit_profile(request):
+class EditProfile(LoginRequiredMixin, View):
+    template_name = 'edit_profile.html'
 
-    if request.method == 'POST':
-        user = request.user
-        username = request.POST['username']
-        email = request.POST['email']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
+    def get(self, request):
+        form = UserUpdateForm(instance=request.user)
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
 
-        user.username = username
-        user.email = email
-        user.first_name = first_name
-        user.last_name = last_name
-        user.save()
+    def post(self, request):
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile was successfully changed.')
+            return redirect('profile')
 
-        messages.success(request, 'Your profile was successfully changed.')
-        return redirect('profile')
-
-    return render(request, 'edit_profile.html')
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
 
 
 @login_required
@@ -38,7 +45,7 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 
-class Register(View):
+class Register(FormView):
     template_name = 'registration/register.html'
 
     def get(self, request):
@@ -61,5 +68,26 @@ class Register(View):
             'form': form
         }
         return render(request, self.template_name, context)
+
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'reset_password/password_reset_form.html'
+    email_template_name = 'reset_password/password_reset_email.html'
+    success_url = reverse_lazy('password_reset')
+    form_class = PasswordResetForm
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'reset_password/password_reset_done.html'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'reset_password/password_reset_confirm.html'
+    form_class = SetPasswordForm
+    success_url = reverse_lazy('password_reset_complete')
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'reset_password/password_reset_complete.html'
 
 

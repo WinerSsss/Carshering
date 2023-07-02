@@ -4,8 +4,8 @@
 
 
 {% block body %}
-<h1>Rents:</h1>
-{% for rent in rents %}
-    <li>{{ rent.status }} {{ rent.rent_start }} {{ rent.rent_stop }} {{ rent.offer }} {{ rent.user }}</li>
-{% endfor %}
-{% endblock body%}
+<h1>My rents:</h1>
+  {% for rent in rents %}
+    <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }} | {{ rent.offer }} | {{ rent.user }}</li>
+  {% endfor %}
+{% endblock body %}
