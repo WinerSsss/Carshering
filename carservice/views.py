@@ -13,6 +13,7 @@ from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
 from django.views.generic import DeleteView
+from django import forms
 
 
 class CarCreateView(LoginRequiredMixin, CreateView):
@@ -124,13 +125,18 @@ def offer_result(request, car_id, offer_id):
 
 class OfferCreateView(LoginRequiredMixin, CreateView):
     model = Offer
-    fields = ['car', 'description', 'price']
+    fields = ['description', 'price']
     template_name = 'offer_create.html'
     success_url = reverse_lazy('offer_read')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['car'] = forms.ModelChoiceField(queryset=Car.objects.filter(user=self.request.user))
+        return form
 
 
 class OfferReadView(LoginRequiredMixin, View):

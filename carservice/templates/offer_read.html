@@ -14,7 +14,7 @@
            <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</button>
         </a>
     </div>
-<h3>Available offers:</h3>
+<h3>Your offers:</h3>
 {% for offer in offers %}
     <li>{{ offer.car }}, {{ offer.price }} PLN, {{ offer.description }}
         <a href="{% url 'offer_update' offer_id=offer.id %}">
