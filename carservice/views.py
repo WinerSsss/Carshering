@@ -18,7 +18,7 @@ from django import forms
 
 class CarCreateView(LoginRequiredMixin, CreateView):
     model = Car
-    fields = ['car_photo', 'vin_number', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod']
+    fields = ['car_photo', 'vin', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod']
     template_name = 'car_create.html'
     success_url = reverse_lazy('car_read')
 
@@ -84,7 +84,6 @@ class CarDeleteView(LoginRequiredMixin, DeleteView):
 @login_required
 def carsearch(request):
     search = request.GET.get('search')
-    cars = Car.objects.none()
     offers = Offer.objects.none()
 
     if search:
@@ -98,17 +97,13 @@ def carsearch(request):
                 car_model = search_terms[1]
 
         if car_brand and car_model:
-            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) & Q(car_model__iexact=car_model))
             offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) & Q(car__car_model__iexact=car_model))
         elif car_brand:
-            cars = Car.objects.filter(Q(car_brand__iexact=car_brand) | Q(car_model__iexact=car_brand))
             offers = Offer.objects.filter(Q(car__car_brand__iexact=car_brand) | Q(car__car_model__iexact=car_brand))
         else:
-            cars = Car.objects.filter(Q(car_model__iexact=car_model))
             offers = Offer.objects.filter(Q(car__car_model__iexact=car_model))
 
     context = {
-        'cars': cars,
         'offers': offers,
         'search': search
     }

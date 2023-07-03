@@ -8,7 +8,7 @@ from datetime import date, timedelta
 from Carshering.settings import RENT_LENGTH_IN_DAYS
 
 
-def vin_validator(vin_number):
+def vin_validator(vin):
     '''
     Validate the VIN (Vehicle Identification Number) using the following formula:
     - Transliterate letters to their numerical counterparts.
@@ -35,12 +35,12 @@ def vin_validator(vin_number):
         11: 8, 12: 7, 13: 6, 14: 5, 15: 4, 16: 3, 17: 2
     }
 
-    if len(vin_number) != 17:
+    if len(vin) != 17:
         return False
 
     checksum = 0
 
-    for index, char in enumerate(vin_number):
+    for index, char in enumerate(vin):
         if index == 8:
             continue
         if char.isdigit():
@@ -52,29 +52,29 @@ def vin_validator(vin_number):
 
         checksum += value * weights[index + 1]
 
-    if vin_number[8].isdigit():
-        expected_checksum = int(vin_number[8])
+    if vin[8].isdigit():
+        expected_checksum = int(vin[8])
     else:
         expected_checksum = 10
 
     return checksum % 11 == expected_checksum
 
 
-def check_vin_number(vin_number):
-    if len(vin_number) != 17:
+def check_vin_number(vin):
+    if len(vin) != 17:
         raise ValidationError(
-            _('VIN number is too short.'),
-            params={'vin_number': vin_number},
+            _('VIN is too short.'),
+            params={'vin': vin},
         )
-    if not vin_number.isalnum():
+    if not vin.isalnum():
         raise ValidationError(
-            _('VIN number should contain only letters and numbers.'),
-            params={'vin_number': vin_number},
+            _('VIN should contain only letters and numbers.'),
+            params={'vin_number': vin},
         )
-    if not vin_validator(vin_number):
+    if not vin_validator(vin):
         raise ValidationError(
-            _('Enter the valid VIN number.'),
-            params={'vin_number': vin_number},
+            _('Enter the valid VIN.'),
+            params={'vin': vin},
         )
 
 
@@ -130,7 +130,7 @@ BRAND_CHOICES = (
 
 class Car(models.Model):
     car_photo = models.ImageField(upload_to='static/image', null=True)
-    vin_number = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
+    vin = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
     car_model = models.CharField(max_length=30)
@@ -139,7 +139,7 @@ class Car(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Model: {self.car_model, self.car_brand}, vin number:({self.vin_number})'
+        return f'Model: {self.car_model, self.car_brand}, vin number:({self.vin})'
 
 
 class Offer(models.Model):
