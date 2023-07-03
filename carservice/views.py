@@ -130,12 +130,15 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('offer_read')
 
     def form_valid(self, form):
+        car_id = self.request.POST.get('car')
+        car = get_object_or_404(Car, pk=car_id, user=self.request.user)
+        form.instance.car = car
         form.instance.user = self.request.user
         return super().form_valid(form)
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['car'] = forms.ModelChoiceField(queryset=Car.objects.filter(user=self.request.user))
+        form.fields['car'] = forms.ModelChoiceField(queryset=Car.objects.filter(user=self.request.user, offer__isnull=True))
         return form
 
 
@@ -266,17 +269,26 @@ class RentDeleteView(LoginRequiredMixin, View):
         return render(request, 'rent_delete.html', {'form': form})
 
 
+@login_required
 def all_offers(request):
-    offers = Offer.objects.all()
+    offers = Offer.objects.filter(rent__isnull=True).exclude(user=request.user)
     return render(request, 'all_offers.html', {'offers': offers})
 
 
+@login_required
 def rent_panel(request):
-    rents = Rent.objects.all()
+    rents = Rent.objects.all().filter(user=request.user)
     return render(request, 'rent_panel.html', {'rents': rents})
 
 
+@login_required
 def rent_detail(request, rent_id):
     rent = get_object_or_404(Rent, id=rent_id)
     offer = rent.offer
     return render(request, 'rent_detail.html', {'rent': rent, 'offer': offer})
+
+
+@login_required
+def offer_detail(request, offer_id):
+    offer = get_object_or_404(Offer, id=offer_id)
+    return render(request, 'offer_detail.html', {'offer': offer})

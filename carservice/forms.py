@@ -19,7 +19,7 @@ class CarDeleteForm(forms.Form):
 class OfferUpdateForm(forms.ModelForm):
     class Meta:
         model = Offer
-        fields = ['description', 'price', 'car']
+        fields = ['description', 'price']
 
 class OfferDeleteForm(forms.Form):
     offer = forms.ChoiceField(label='Offer')

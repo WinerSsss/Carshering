@@ -19,11 +19,11 @@
 {% else %}
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" class="btn btn-secondary" value="Submit">
-    <a href="{% url 'offer_read' %}">
-        <button class="btn btn-secondary" style="margin: 0 20px 0 20px;">Back</button>
-    </a>
+    {{ form.rent_start|as_crispy_field }}
+    {{ form.duration|as_crispy_field }}
+      <legend style="font-size: 12px; color: gray; margin-top: -11px;">*Required fields</legend>
+    <input type="submit" class="btn btn-secondary" value="Rent">
+    <a href="{% url 'offer_read' %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">Back</a>
   </form>
 {% endif %}
 

@@ -3,32 +3,25 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <div style="margin: 20px 0 20px 0;">
-        <a href="{% url 'car_create' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Add car</button>
-        </a>
-        <a href="{% url 'car_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show yours cars</button>
-        </a>
-        <a href="{% url 'offer_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</button>
-        </a>
-    </div>
-<h1>Available cars:</h1>
+<div style="margin: 20px 0 20px 0; background-color: #f3f3f3; border-radius: 10px; padding: 10px; text-align: center;">
+        <a href="{% url 'car_create' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Add car</a>
+    <a href="{% url 'offer_create' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Create offer</a>
+    <a href="{% url 'car_read' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show yours cars</a>
+    <a href="{% url 'offer_read' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</a>
+</div>
 {% for car in cars %}
-<li>
-{% if car.car_photo %}
-    <img class="rounded float-start" style="display: flex; max-width: 200px;" src="{{ car.car_photo.url }}">
-{% else %}
-    <p style="text-align: center;">No photo available</p>
-{% endif %}
-        {{ car.car_brand }} {{ car.car_model }} {{ car.serial_number }} {{ car.date_of_prod }} {{ car.car_mileage }}
-</li>
-<a href="{% url 'update_car' car_id=car.id %}">
-    <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</button>
-</a>
-<a href="{% url 'delete_car' pk=car.id %}">
-    <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">DELETE</button>
-</a>
+<div class="car-item" style="display: flex ; margin-bottom: 24px; align-items: flex-end;">
+    {% if car.car_photo %}
+        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 20px;" src="{{ car.car_photo.url }}">
+            <div>
+                <p style="margin-left: 20px;">{{ car.car_brand }} {{ car.car_model }}</p>
+                <p style="margin-left: 20px;"> Mileage: {{ car.car_mileage }} KM</p>
+                <a href="{% url 'update_car' car_id=car.id %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</a>
+                <a href="{% url 'delete_car' pk=car.id %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">DELETE</a>
+            </div>
+    {% else %}
+        <p style="text-align: center;">No photo available</p>
+    {% endif %}
+</div>
 {% endfor %}
 {% endblock body %}

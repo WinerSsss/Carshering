@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <style>
+        .description-field {
+            height: auto;
+            width: 650px;
+            overflow-y: auto;
+        }
+        .offer-details-container {
+            display: flex;
+            align-items: flex-start;
+        }
+    </style>
+
+    <h2 style="margin-top: 10px;">OFFER DETAILS</h2>
+    <hr>
+    <div class="offer-details-container">
+        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 10px;" src="{{ offer.car.car_photo.url }}">
+        <div style="flex-direction: column;">
+            <textarea class="form-control description-field" readonly>{{ offer.description }}</textarea>
+            <p style="margin-bottom: 0;">{{ offer.price }} PLN/day </p>
+            <a href="{% url 'all_offers' %}" class="btn btn-outline-secondary" style="padding: 3px; margin-top: 5px;">PREVIOUS PAGE</a>
+        </div>
+    </div>
+{% endblock body %}

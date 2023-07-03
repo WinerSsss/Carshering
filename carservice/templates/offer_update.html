@@ -3,11 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-  <h3>Edit offer:</h3>
+  <h3 style="margin-top: 10px;">Edit offer:</h3>
   <hr>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
+      <legend style="font-size: 12px; color: gray; margin-top: -11px;">*Required fields</legend>
     <button class="btn btn-secondary" type="submit">Save</button>
   </form>
 {% endblock body %}

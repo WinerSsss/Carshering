@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView, \
     CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView, RentUpdateView, RentDeleteView, carsearch, offer_result, all_offers, rent_panel, \
-    rent_detail
+    rent_detail, offer_detail
 
 
 urlpatterns = [
@@ -31,5 +31,6 @@ urlpatterns = [
     path('rent/update/<int:rent_id>/',RentUpdateView.as_view(),name='rent_update'),
     path('rent/delete/', RentDeleteView.as_view(), name='rent_delete'),
     path('rent_detail/<int:rent_id>/', rent_detail, name='rent_detail'),
+    path('offer_detail/<int:offer_id>/', offer_detail, name='offer_detail'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

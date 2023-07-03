@@ -2,16 +2,14 @@
 {% load static %}
 
 {% block body %}
-<h1>Rent panel</h1>
-  {% for rent in rents %}
-    <li>{{ rent.status }} | {{ rent.rent_start }} | {{ rent.duration }}  | {{ rent.offer }}
-    <a href="{% url 'rent_detail' rent.id %}">
-        <button class="btn btn-secondary" style="margin: 0 20px 0 20px;">Details</button>
-    </a>
-    </li>
+    <div>
+    <h1 style="margin-top: 10px;">Your Rents</h1>
+    {% for rent in rents %}
+        <div style="display: flex; flex-direction: column">
+    <p style="margin-bottom: 10px; margin-top: 10px;"> {{ rent.offer.car.car_brand }} {{ rent.offer.car.car_model }} rented for {{ rent.duration }} days, for {{ rent.offer.price }} PLN/day.</p>
+            <a href="{% url 'rent_detail' rent.id %}" class="btn btn-outline-secondary" style="padding: 1px; margin-bottom: 1px; width: 40%;">CLICK FOR MORE DETAILS</a>
+        </div>
+        <hr>
   {% endfor %}
+    </div>
 {% endblock body %}
-
-    <a href="{% url 'rent_detail' rent.id %}">
-        <button class="btn btn-secondary" style="margin: 0 20px 0 20px;">Details</button>
-    </a>
