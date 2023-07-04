@@ -79,13 +79,12 @@ def check_vin_number(vin):
 
 
 def validate_year(prod_year):
-    first_made_car = date(1886, 1, 29)
-    if prod_year < first_made_car:
+    if prod_year < 1886:
         raise ValidationError(
             _('You can\'t enter the year before the first car was made.'),
             params={'prod_year': prod_year},
         )
-    if prod_year > date.today():
+    if prod_year > date.today().year:
         raise ValidationError(
             _('You can\'t add the car from future.'),
             params={'prod_year': prod_year},
@@ -132,9 +131,9 @@ class Car(models.Model):
     car_photo = models.ImageField(upload_to='static/image', null=True)
     vin = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
-    car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
-    car_model = models.CharField(max_length=30)
-    date_of_prod = models.DateField(null=True, validators=[validate_year])
+    car_brand = models.CharField(max_length=15, choices=BRAND_CHOICES)
+    car_model = models.CharField(max_length=15)
+    date_of_prod = models.IntegerField(null=True, validators=[validate_year])
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -143,7 +142,7 @@ class Car(models.Model):
 
 
 class Offer(models.Model):
-    description = models.TextField()
+    description = models.TextField(max_length=300)
     price = models.FloatField(validators=[MinValueValidator(10.0)])
 
     car = models.OneToOneField(Car, on_delete=models.CASCADE)
@@ -192,7 +191,7 @@ class Rent(models.Model):
     ]
 
 
-    status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
+    status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES)
     rent_start = models.DateField(null=True, validators=[past_rent, future_rent, rent_length])
     duration = models.PositiveIntegerField(validators=[MaxValueValidator(30)])
     rent_end = models.DateField(null=True, validators=[past_rent])
