@@ -1,23 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block body %}
-  {% if cars %}
-    <ul>
-      {% for car in cars %}
-        <li>
-          {{ car.car_brand }} {{ car.car_model }}
-          <ul>
-            {% for offer in offers %}
-              {% if offer.car_id == car.id %}
-                  <a href="{% url 'offer_result' car_id=car.pk offer_id=offer.pk %}">{{ offer.car }} {{ offer.price }} {{ offer.user }}</a>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p style="margin-top: 20px">No result for {{ search }}.</p>
-  {% endif %}
-{% endblock body %}
 
+{% block body %}
+    <h2 style="margin-top: 10px;">FOUND CARS:</h2>
+    <hr>
+  {% if offers %}
+    {% for offer in offers %}
+      {% with rent=offer.rent_set.first %}
+        {% if offer.user != request.user and not rent %}
+          <a href="{% url 'offer_result' car_id=offer.car.pk offer_id=offer.pk %}" class="btn btn-outline-secondary" style="padding: 5px; margin-top: 5px;">
+            {{ offer.car.car_brand }} {{ offer.car.car_model }}
+          </a>
+        {% endif %}
+      {% endwith %}
+    {% endfor %}
+  {% else %}
+    <p style="margin-top: 20px">No results for {{ search }}.</p>
+  {% endif %}
+{% endblock %}

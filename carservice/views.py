@@ -287,3 +287,9 @@ def rent_detail(request, rent_id):
 def offer_detail(request, offer_id):
     offer = get_object_or_404(Offer, id=offer_id)
     return render(request, 'offer_detail.html', {'offer': offer})
+
+
+@login_required
+def offer_detail_search(request, offer_id):
+    offer = get_object_or_404(Offer, id=offer_id)
+    return render(request, 'offer_detail_search.html', {'offer': offer})
