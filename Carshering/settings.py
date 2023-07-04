@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 import dotenv
-
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     "users",
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_celery_results',
+    'celery',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -145,3 +147,23 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 RENT_LENGTH_IN_DAYS = 30
+
+# Celery settings
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'django-db+sqlite:///results.sqlite3'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Warsaw'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_CACHE_BACKEND = 'django-cache'
+
+
+CELERY_BEAT_SCHEDULE = {
+    'update_rent_status': {
+        'task': 'carservice.tasks.update_rent_status',
+        'schedule': crontab(hour=0, minute=0),
+    },
+}

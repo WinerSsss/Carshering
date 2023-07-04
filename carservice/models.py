@@ -196,8 +196,10 @@ class Rent(models.Model):
     rent_start = models.DateField(null=True, validators=[past_rent, future_rent, rent_length])
     duration = models.PositiveIntegerField(validators=[MaxValueValidator(30)])
     rent_end = models.DateField(null=True, validators=[past_rent])
+
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    close_rent = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):

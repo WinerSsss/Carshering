@@ -270,10 +270,11 @@ def all_offers(request):
     return render(request, 'all_offers.html', {'offers': offers})
 
 
-@login_required
 def rent_panel(request):
-    rents = Rent.objects.all().filter(user=request.user)
-    return render(request, 'rent_panel.html', {'rents': rents})
+    user = request.user
+    rents_as_owner = Rent.objects.filter(offer__user=user, close_rent=False)
+    rents_as_renter = Rent.objects.filter(user=user, close_rent=False)
+    return render(request, 'rent_panel.html', {'rents_as_owner': rents_as_owner, 'rents_as_renter': rents_as_renter})
 
 
 @login_required
@@ -293,3 +294,11 @@ def offer_detail(request, offer_id):
 def offer_detail_search(request, offer_id):
     offer = get_object_or_404(Offer, id=offer_id)
     return render(request, 'offer_detail_search.html', {'offer': offer})
+
+
+@login_required
+def close_rent(request, rent_id):
+    rent = get_object_or_404(Rent, id=rent_id)
+    rent.close_rent = True
+    rent.save()
+    return redirect('rent_panel')
