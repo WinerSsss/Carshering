@@ -8,7 +8,7 @@ def update_rent_status():
     pending_rents = Rent.objects.filter(status='pending', rent_start__lte=now().date())
     pending_rents.update(status='active')
 
-    active_rents = Rent.objects.filter(status='active', rent_end__lt=now().date())
+    active_rents = Rent.objects.filter(status='active', rent_end__gt=now().date())
     active_rents.update(status='overdue')
 
     closed_rents = Rent.objects.filter(close_rent=True)
