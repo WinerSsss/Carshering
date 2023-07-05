@@ -5,17 +5,12 @@ from .models import Rent
 
 @shared_task
 def update_rent_status():
-    pending_rents = Rent.objects.filter(status='pending', rent_start__lte=now().date())
-    pending_rents.update(status='active')
+    pending_rents = Rent.objects.filter(status='PENDING', rent_start__lte=now().date())
+    pending_rents.update(status='ACTIVE')
 
-    active_rents = Rent.objects.filter(status='active', rent_end__gt=now().date())
-    active_rents.update(status='overdue')
+    active_rents = Rent.objects.filter(status='ACTIVE', rent_end__gt=now().date())
+    active_rents.update(status='OVERDUE')
 
-    closed_rents = Rent.objects.filter(close_rent=True)
-    for rent in closed_rents:
-        rent.status = 'finished'
-        rent.save()
-
-    return pending_rents, active_rents, closed_rents
+    return pending_rents, active_rents
 
 # The task is scheduled to run every day at midnight.

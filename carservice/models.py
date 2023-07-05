@@ -89,6 +89,11 @@ def validate_year(prod_year):
             _('You can\'t add the car from future.'),
             params={'prod_year': prod_year},
         )
+    if len(str(prod_year)) != 4:
+        raise ValidationError(
+            _('Enter the valid year.'),
+            params={'prod_year': prod_year},
+        )
 
 
 def validate_mileage(mileage):
@@ -179,9 +184,9 @@ def future_rent(rent_date):
 
 class Rent(models.Model):
     PENDING = 'pending'
-    ACTIVE = 'active'
-    FINISHED = 'finished'
-    OVERDUE = 'overdue'
+    ACTIVE = 'Rent active'
+    FINISHED = 'Rent finished'
+    OVERDUE = 'Rent overdue'
 
     STATUS_CHOICES = [
         (PENDING, 'pending'),
@@ -207,6 +212,9 @@ class Rent(models.Model):
             self.status = self.PENDING
         else:
             self.status = self.ACTIVE
+        if self.close_rent:
+            self.status = self.FINISHED
+            self.rent_end = now().date()
         super().save(*args, **kwargs)
 
 

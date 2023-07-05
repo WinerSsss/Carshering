@@ -10,6 +10,7 @@
             <p style="margin-bottom: 0;">Status: {{ rent.status }}</p>
             <p style="margin-bottom: 0;">Rent Start: {{ rent.rent_start }}</p>
             <p style="margin-bottom: 0;">Expected return date: {{ rent.rent_end }}</p>
+            <p style="margin-bottom: 0;">Rented from: {{ rent.offer.user }}</p>
             <a href="{% url 'rent_panel' %}" class="btn btn-outline-secondary" style="padding: 3px; margin-top: 5px;">PREVIOUS PAGE</a>
         </div>
     </div>

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div style="display: flex; gap: 20px; background-color: #f1f1f1; padding: 10px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px">
+  <div style="border-right: 1px grey solid; margin-top: 0">
+    <h2 style="margin-bottom: 20px; margin-top: 10px; margin-right: 10px;">Rents as Owner:</h2>
+    {% for rent in rents_as_owner %}
+      <p style="margin-right: 10px">&#128663; {{ rent.status }}. From {{ rent.rent_start }} to {{ rent.rent_end }}. {{ rent.offer.car.car_brand }} {{ rent.offer.car.car_model }} for {{ rent.offer.price }} PLN/day.
+      Rented to {{ rent.user }}</p>
+    {% endfor %}
+  </div>
+  <div>
+    <h2 style="margin-bottom: 20px; margin-top: 10px">Rents as Renter:</h2>
+    {% for rent in rents_as_renter %}
+      <p>&#128663; ID: {{ rent.id }}. {{ rent.status }}. From {{ rent.rent_start }} to {{ rent.rent_end }}. {{ rent.offer.car.car_brand }} {{ rent.offer.car.car_model }} for {{ rent.offer.price }} PLN/day.
+      Rented from {{ rent.offer.user }}.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock body %}

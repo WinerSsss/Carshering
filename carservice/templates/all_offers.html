@@ -40,6 +40,7 @@
                 <div class="offer-item">
                     <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}">
                         <p>{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
+                        <p>{{ offer.price }} PLN/day </p>
                     <div class="buttons"><a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
                     <a href="{% url 'offer_detail' offer.id %}" class="btn btn-outline-secondary">DETAILS</a></div>
                 </div>

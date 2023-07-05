@@ -6,15 +6,17 @@
 {% block body %}
 {% block content %}
 {% if message %}
-  <p>{{ message }}</p>
- <button class="btn btn-secondary"><a href="{% url 'all_offers' %}">Back</a></button>
+  <p style="margin-top: 10px;">{{ message }}</p>
+ <a href="{% url 'all_offers' %}" class="btn btn-secondary">Back</a>
   <br><br>
   {% if not message == "This offer is already rented." %}
+  {% if not message == "You cannot rent your own car." %}
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
       <input type="submit" class="btn btn-secondary" value="Submit">
     </form>
+  {% endif %}
   {% endif %}
 {% else %}
   <form method="post">

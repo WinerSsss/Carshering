@@ -174,7 +174,6 @@ class OfferUpdateView(LoginRequiredMixin, View):
         return render(request, 'offer_update.html', {'form': form, 'offer': offer})
 
 
-
 class OfferDeleteView(LoginRequiredMixin, DeleteView):
     model = Offer
     success_url = reverse_lazy('offer_read')
@@ -200,10 +199,22 @@ class RentCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         offer_id = self.kwargs['offer_id']
         offer = get_object_or_404(Offer, id=offer_id)
-        if Rent.objects.filter(offer=offer).exists():
+
+        if offer.user == self.request.user:
+            return self.cannot_rent_own_car_response(offer)
+
+        if Rent.objects.filter(offer=offer, status__in=['Rent active', 'pending']).exists():
             return self.offer_already_rented_response(offer)
+
         form.instance.offer = offer
         return super().form_valid(form)
+
+    def cannot_rent_own_car_response(self, offer):
+        context = {
+            'message': 'You cannot rent your own car.',
+            'offer': offer,
+        }
+        return self.render_to_response(self.get_context_data(**context))
 
     def offer_already_rented_response(self, offer):
         context = {
@@ -211,28 +222,6 @@ class RentCreateView(LoginRequiredMixin, CreateView):
             'offer': offer,
         }
         return self.render_to_response(self.get_context_data(**context))
-
-
-class RentListView(LoginRequiredMixin, View):
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Rent.objects.all()
-        else:
-            return Rent.objects.filter(user=self.request.user)
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-
-    def get(self, request):
-        rents = self.get_queryset()
-
-        return render(
-            request,
-            template_name='rent_read.html',
-            context={'rents': rents}
-        )
 
 
 class RentUpdateView(LoginRequiredMixin, View):
@@ -266,10 +255,11 @@ class RentDeleteView(LoginRequiredMixin, View):
 
 @login_required
 def all_offers(request):
-    offers = Offer.objects.filter(rent__isnull=True).exclude(user=request.user)
+    offers = Offer.objects.exclude(user=request.user).exclude(rent__status='Rent active').exclude(rent__status='pending')
     return render(request, 'all_offers.html', {'offers': offers})
 
 
+@login_required()
 def rent_panel(request):
     user = request.user
     rents_as_owner = Rent.objects.filter(offer__user=user, close_rent=False)
@@ -302,3 +292,13 @@ def close_rent(request, rent_id):
     rent.close_rent = True
     rent.save()
     return redirect('rent_panel')
+
+
+@login_required
+def rent_archive(request):
+    user = request.user
+
+    rents_as_owner = Rent.objects.filter(offer__user=user, close_rent=True, status='Rent finished')
+    rents_as_renter = Rent.objects.filter(user=user, close_rent=True, status='Rent finished')
+
+    return render(request, 'rent_archive.html', {'rents_as_owner': rents_as_owner, 'rents_as_renter': rents_as_renter})
