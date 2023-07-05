@@ -4,9 +4,9 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 
-from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, RentListView, \
+from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, \
     CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView, RentUpdateView, RentDeleteView, carsearch, offer_result, all_offers, rent_panel, \
-    rent_detail
+    rent_detail, offer_detail, offer_detail_search, close_rent, rent_archive
 
 
 urlpatterns = [
@@ -26,10 +26,13 @@ urlpatterns = [
     path('offer/update/<int:offer_id>/', OfferUpdateView.as_view(), name='offer_update'),
     path('offer/delete/<int:pk>/', OfferDeleteView.as_view(), name='offer_delete'),
     path('rent/create/<int:offer_id>/', RentCreateView.as_view(), name='rent_create'),
-    path('rent/read/', RentListView.as_view(), name='rent_read'),
     path('rent_panel', rent_panel, name='rent_panel'),
-    path('rent/update/<int:rent_id>/',RentUpdateView.as_view(),name='rent_update'),
+    path('rent/update/<int:rent_id>/', RentUpdateView.as_view(),name='rent_update'),
     path('rent/delete/', RentDeleteView.as_view(), name='rent_delete'),
     path('rent_detail/<int:rent_id>/', rent_detail, name='rent_detail'),
+    path('offer_detail/<int:offer_id>/', offer_detail, name='offer_detail'),
+    path('offer_detail_search/<int:offer_id>/', offer_detail_search, name='offer_detail_search'),
+    path('close_rent/<int:rent_id>/', close_rent, name='close_rent'),
+    path('rent_archive/', rent_archive, name='rent_archive'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

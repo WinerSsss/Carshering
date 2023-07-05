@@ -3,26 +3,22 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <div style="margin: 20px 0 20px 0;">
-        <a href="{% url 'offer_create' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Create offer</button>
-        </a>
-        <a href="{% url 'car_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show yours cars</button>
-        </a>
-        <a href="{% url 'offer_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</button>
-        </a>
+    <div style="margin: 20px 0 20px 0; background-color: #f3f3f3; border-radius: 10px; padding: 10px; text-align: center;">
+         <a href="{% url 'car_create' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Add car</a>
+        <a href="{% url 'offer_create' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Create offer</a>
+        <a href="{% url 'car_read' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show yours cars</a>
+        <a href="{% url 'offer_read' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</a>
+        <a href="{% url 'rent_archive' %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">Rent archive</a>
     </div>
-<h3>Your offers:</h3>
 {% for offer in offers %}
-    <li>{{ offer.car }}, {{ offer.price }} PLN, {{ offer.description }}
-        <a href="{% url 'offer_update' offer_id=offer.id %}">
-            <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</button>
-        </a>
-        <a href="{% url 'offer_delete' pk=offer.id %}">
-            <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">DELETE</button>
-        </a>
-    </li>
+    <div class="offer-item" style="display: flex; margin-bottom: 24px; align-items: flex-end;">
+        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 20px;" src="{{ offer.car.car_photo.url }}">
+        <div>
+            <p style="margin-left: 20px;">{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
+            <p style="margin-left: 20px;">Price: {{ offer.price }} PLN</p>
+            <a href="{% url 'offer_update' offer_id=offer.id %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</a>
+            <a href="{% url 'offer_delete' pk=offer.id %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">DELETE</a>
+        </div>
+    </div>
 {% endfor %}
 {% endblock body %}

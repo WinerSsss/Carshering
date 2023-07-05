@@ -1,23 +1,54 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block body %}
-  {% if cars %}
-    <ul>
-      {% for car in cars %}
-        <li>
-          {{ car.car_brand }} {{ car.car_model }}
-          <ul>
-            {% for offer in offers %}
-              {% if offer.car_id == car.id %}
-                  <a href="{% url 'offer_result' car_id=car.pk offer_id=offer.pk %}">{{ offer.car }} {{ offer.price }} {{ offer.user }}</a>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No result for {{ search }}.</p>
-  {% endif %}
-{% endblock body %}
 
+{% block body %}
+        <style>
+        .offer-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .offer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .offer-image {
+            max-width: 200px;
+            max-height: 100px;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: -10px;
+        }
+    </style>
+
+    <h2 style="margin-top: 10px;">FOUND CARS:</h2>
+    <hr>
+  {% if offers %}
+    <div class="offer-container">
+        {% for offer in offers %}
+            {% if not offer.rent %}
+                <div class="offer-item">
+                    <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}">
+                        <p>{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
+                        <p>{{ offer.price }} PLN/day </p>
+                    <div class="buttons"><a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
+                    <a href="{% url 'offer_detail_search' offer.id %}" class="btn btn-outline-secondary">DETAILS</a></div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+  {% else %}
+    <p style="margin-top: 20px">No results for {{ search }}.</p>
+  {% endif %}
+{% endblock %}

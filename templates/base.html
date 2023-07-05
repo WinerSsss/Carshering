@@ -58,7 +58,7 @@
         </form>
           <div>
               {% if user.profile.image %}
-                <img  style="vertical-align: middle; width: 50px; height:50px; border-radius: 50%; margin-left: 10px; margin-right: 10px;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar">
+                <a  href="{% url 'profile' %}"><img style="vertical-align: middle; width: 50px; height:50px; border-radius: 50%; margin-left: 10px; margin-right: 10px;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar"></a>
               {% endif %}
 
           </div>

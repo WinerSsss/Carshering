@@ -2,14 +2,49 @@
 {% load static %}
 
 {% block body %}
-<h1>Available offers:</h1>
-{% for offer in offers %}
-    {% if not offer.rent %}
-        <li>{{ offer.car }} {{ offer.price }} {{ offer.description }} {{ offer.user }}
-            <a href="{% url 'rent_create' offer.id %}">
-                <button type="submit" class="btn btn-secondary">RENT</button>
-            </a>
-        </li>
-    {% endif %}
-{% endfor %}
+    <style>
+        .offer-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .offer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .offer-image {
+            max-width: 200px;
+            max-height: 100px;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: -10px;
+        }
+    </style>
+
+    <h1 style="margin-top: 10px">Available offers:</h1>
+    <hr>
+    <div class="offer-container">
+        {% for offer in offers %}
+            {% if not offer.rent %}
+                <div class="offer-item">
+                    <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}">
+                        <p>{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
+                        <p>{{ offer.price }} PLN/day </p>
+                    <div class="buttons"><a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
+                    <a href="{% url 'offer_detail' offer.id %}" class="btn btn-outline-secondary">DETAILS</a></div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock body %}
