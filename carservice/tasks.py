@@ -1,16 +1,13 @@
-from django.utils.timezone import now
-from celery import shared_task
 from .models import Rent
+from django.utils.timezone import now
 
 
-@shared_task
 def update_rent_status():
-    pending_rents = Rent.objects.filter(status='PENDING', rent_start__lte=now().date())
-    pending_rents.update(status='ACTIVE')
+    rents = Rent.objects.exclude(status=Rent.FINISHED)
+    for rent in rents:
+        if rent.rent_start == now().date():
+            rent.status = Rent.ACTIVE
+        elif rent.rent_end > now().date():
+            rent.status = Rent.OVERDUE
 
-    active_rents = Rent.objects.filter(status='ACTIVE', rent_end__gt=now().date())
-    active_rents.update(status='OVERDUE')
-
-    return pending_rents, active_rents
-
-# The task is scheduled to run every day at midnight.
+        rent.save()

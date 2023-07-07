@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from datetime import date, timedelta
 from Carshering.settings import RENT_LENGTH_IN_DAYS
+from django.utils.timezone import now
 
 
 def vin_validator(vin):
@@ -220,5 +221,3 @@ class Rent(models.Model):
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'
-
-

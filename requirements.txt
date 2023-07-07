@@ -2,8 +2,3 @@ Django == 4.2.2
 python-dotenv == 1.0.0
 crispy_forms == 2.0
 crisy-bootstrap5 == 0.7
-celery~=5.3.1
-redis==4.6.0
-SQLAlchemy==2.0.17
-django-celery-beat==2.5.0
-django-celery-results==2.5.1
