@@ -12,7 +12,7 @@
     </div>
 {% for offer in offers %}
     <div class="offer-item" style="display: flex; margin-bottom: 24px; align-items: flex-end;">
-        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 20px;" src="{{ offer.car.car_photo.url }}">
+        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 20px;" src="{{ offer.car.car_photo.url }}" alt="Car photo">
         <div>
             <p style="margin-left: 20px;">{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
             <p style="margin-left: 20px;">Price: {{ offer.price }} PLN</p>
