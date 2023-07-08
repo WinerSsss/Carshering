@@ -4,10 +4,9 @@ from django import forms
 
 
 class CarUpdateForm(forms.ModelForm):
-    #image = forms.ImageField(label='New Car Image', required=False)
     class Meta:
         model = Car
-        fields = ['serial_number', 'car_mileage', 'car_brand', 'car_model', 'car_model', "car_photo"]
+        fields = ['vin', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod', "car_photo"]
 
 
 class CarDeleteForm(forms.Form):
@@ -20,7 +19,7 @@ class CarDeleteForm(forms.Form):
 class OfferUpdateForm(forms.ModelForm):
     class Meta:
         model = Offer
-        fields = ['description', 'price', 'car']
+        fields = ['description', 'price']
 
 class OfferDeleteForm(forms.Form):
     offer = forms.ChoiceField(label='Offer')

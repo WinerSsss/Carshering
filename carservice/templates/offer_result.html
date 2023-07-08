@@ -2,9 +2,15 @@
 {% load static %}
 
 {% block body %}
-  <h1>Offer Result</h1>
-  <p>Car: {{ car.car_brand }} {{ car.car_model }}  <img src="{{ car.car_photo.url }}"></p>
-  <p>Offer: {{ offer.price }} {{ offer.user }}</p>
-  <button class="btn btn-secondary"><a href="{% url 'rent_create' offer.id %}">RENT</a></button>
-  <button class="btn btn-secondary"><a href="{% url 'home' %}">Back to main page</a></button>
+    <h1>Offer Result</h1>
+    <div style="display: flex; align-items: flex-end; background-color: #f8f8f8; padding: 15px; border-radius: 10px;">
+        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 10px;" src="{{ car.car_photo.url }}">
+        <div>
+            <p style="margin-left: 2px;">{{ car.car_brand }} {{ car.car_model }} for {{ offer.price }} PLN/day.</p>
+            <div style="display: flex; align-items: flex-end;">
+                <a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 20px;">RENT</a>
+                <a href="{% url 'offer_detail_search' offer.id %}" class="btn btn-outline-secondary">DETAILS</a>
+            </div>
+        </div>
+    </div>
 {% endblock body %}

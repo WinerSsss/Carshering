@@ -3,26 +3,16 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <h4 style="margin-top: 20px;">Your profile: {{ user.username }}</h4>
-                {% if user.profile.image %}
-                    <img class="rounded-circle" style="max-width: 50%; max-height: 50%; vertical-align: middle;" src="{{ user.profile.image.url }}" alt="Avatar">
-                {% endif %}
-                <p>Email: {{ user.email }}</p>
-                <p>First name: {{ user.first_name }}</p>
-                <p>Last name: {{ user.last_name }}</p>
-                <p>Location: {{ user.profile.location }}</p>
-                <div class="mt-auto">
-                    <a href="{% url 'edit_profile' %}">
-                        <button type="submit" class="btn btn-secondary">Edit your profile</button>
-                    </a>
-                    <a href="{% url 'car_read' %}">
-                        <button type="submit" class="btn btn-secondary">Renter profile</button>
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="profile-info-container" style="background-color: #eeeeee; border-radius: 10px; padding: 10px; margin-top: 20px;">
+    <h4 style="margin-top: 20px;">Your profile: {{ user.username }}</h4>
+    {% if user.profile.image %}
+    <img style="border: 5px solid #555; vertical-align: middle; width: 200px; height:200px; border-radius: 50%; margin-bottom: 10px;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar">
+    {% endif %}
+    <p style="background-color: white; padding: 2px; border-radius: 3px;">Email   : {{ user.email }}</p>
+    <p style="background-color: white; padding: 2px; border-radius: 3px;">First name: {{ user.first_name }}</p>
+    <p style="background-color: white; padding: 2px; border-radius: 3px;">Last name: {{ user.last_name }}</p>
+    <p style="background-color: white; padding: 2px; border-radius: 3px;">Location: {{ user.profile.location }}</p>
+    <a href="{% url 'edit_profile' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Edit your profile</a>
+    <a href="{% url 'car_read' %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">Renter profile</a>
     </div>
 {% endblock body %}

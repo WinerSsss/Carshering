@@ -6,9 +6,10 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from datetime import date, timedelta
 from Carshering.settings import RENT_LENGTH_IN_DAYS
+from django.utils.timezone import now
 
 
-def vin_validator(vin_number):
+def vin_validator(vin):
     '''
     Validate the VIN (Vehicle Identification Number) using the following formula:
     - Transliterate letters to their numerical counterparts.
@@ -35,12 +36,12 @@ def vin_validator(vin_number):
         11: 8, 12: 7, 13: 6, 14: 5, 15: 4, 16: 3, 17: 2
     }
 
-    if len(vin_number) != 17:
+    if len(vin) != 17:
         return False
 
     checksum = 0
 
-    for index, char in enumerate(vin_number):
+    for index, char in enumerate(vin):
         if index == 8:
             continue
         if char.isdigit():
@@ -52,42 +53,46 @@ def vin_validator(vin_number):
 
         checksum += value * weights[index + 1]
 
-    if vin_number[8].isdigit():
-        expected_checksum = int(vin_number[8])
+    if vin[8].isdigit():
+        expected_checksum = int(vin[8])
     else:
         expected_checksum = 10
 
     return checksum % 11 == expected_checksum
 
 
-def check_vin_number(vin_number):
-    if len(vin_number) != 17:
+def check_vin_number(vin):
+    if len(vin) != 17:
         raise ValidationError(
-            _('VIN number is too short.'),
-            params={'vin_number': vin_number},
+            _('VIN is too short.'),
+            params={'vin': vin},
         )
-    if not vin_number.isalnum():
+    if not vin.isalnum():
         raise ValidationError(
-            _('VIN number should contain only letters and numbers.'),
-            params={'vin_number': vin_number},
+            _('VIN should contain only letters and numbers.'),
+            params={'vin_number': vin},
         )
-    if not vin_validator(vin_number):
+    if not vin_validator(vin):
         raise ValidationError(
-            _('Enter the valid VIN number.'),
-            params={'vin_number': vin_number},
+            _('Enter the valid VIN.'),
+            params={'vin': vin},
         )
 
 
 def validate_year(prod_year):
-    first_made_car = date(1886, 1, 29)
-    if prod_year < first_made_car:
+    if prod_year < 1886:
         raise ValidationError(
             _('You can\'t enter the year before the first car was made.'),
             params={'prod_year': prod_year},
         )
-    if prod_year > date.today():
+    if prod_year > date.today().year:
         raise ValidationError(
             _('You can\'t add the car from future.'),
+            params={'prod_year': prod_year},
+        )
+    if len(str(prod_year)) != 4:
+        raise ValidationError(
+            _('Enter the valid year.'),
             params={'prod_year': prod_year},
         )
 
@@ -130,20 +135,20 @@ BRAND_CHOICES = (
 
 class Car(models.Model):
     car_photo = models.ImageField(upload_to='static/image', null=True)
-    serial_number = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
+    vin = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
-    car_brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
-    car_model = models.CharField(max_length=30)
-    date_of_prod = models.DateField(null=True, validators=[validate_year])
+    car_brand = models.CharField(max_length=15, choices=BRAND_CHOICES)
+    car_model = models.CharField(max_length=15)
+    date_of_prod = models.IntegerField(null=True, validators=[validate_year])
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Model: {self.car_model, self.car_brand}, serial number:({self.serial_number})'
+        return f'Model: {self.car_model, self.car_brand}, vin number:({self.vin})'
 
 
 class Offer(models.Model):
-    description = models.TextField()
+    description = models.TextField(max_length=300)
     price = models.FloatField(validators=[MinValueValidator(10.0)])
 
     car = models.OneToOneField(Car, on_delete=models.CASCADE)
@@ -180,9 +185,9 @@ def future_rent(rent_date):
 
 class Rent(models.Model):
     PENDING = 'pending'
-    ACTIVE = 'active'
-    FINISHED = 'finished'
-    OVERDUE = 'overdue'
+    ACTIVE = 'Rent active'
+    FINISHED = 'Rent finished'
+    OVERDUE = 'Rent overdue'
 
     STATUS_CHOICES = [
         (PENDING, 'pending'),
@@ -192,12 +197,14 @@ class Rent(models.Model):
     ]
 
 
-    status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES, default=ACTIVE)
+    status = models.CharField(max_length=30, blank=True, null=True, choices=STATUS_CHOICES)
     rent_start = models.DateField(null=True, validators=[past_rent, future_rent, rent_length])
     duration = models.PositiveIntegerField(validators=[MaxValueValidator(30)])
     rent_end = models.DateField(null=True, validators=[past_rent])
+
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    close_rent = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):
@@ -206,10 +213,11 @@ class Rent(models.Model):
             self.status = self.PENDING
         else:
             self.status = self.ACTIVE
+        if self.close_rent:
+            self.status = self.FINISHED
+            self.rent_end = now().date()
         super().save(*args, **kwargs)
 
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'
-
-

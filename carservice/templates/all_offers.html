@@ -2,33 +2,49 @@
 {% load static %}
 
 {% block body %}
-<div class="container" style="margin-top: 20px;">
-    <h1>Available offers:</h1>
-    {% for offer in offers %}
-        {% if not offer.rent %}
-            <div class="row" style="margin-bottom: 10px;">
-                <div class="col-md-3">
-                    {% if offer.car.car_photo %}
-                        <img class="rounded float-start" style="max-width: 200px;" src="{{ offer.car.car_photo.url }}">
-                    {% else %}
-                        <p>No photo available</p>
-                    {% endif %}
+    <style>
+        .offer-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .offer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .offer-image {
+            max-width: 200px;
+            max-height: 100px;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: -10px;
+        }
+    </style>
+
+    <h1 style="margin-top: 10px">Available offers:</h1>
+    <hr>
+    <div class="offer-container">
+        {% for offer in offers %}
+            {% if not offer.rent %}
+                <div class="offer-item">
+                    <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}">
+                        <p>{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
+                        <p>{{ offer.price }} PLN/day </p>
+                    <div class="buttons"><a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
+                    <a href="{% url 'offer_detail' offer.id %}" class="btn btn-outline-secondary">DETAILS</a></div>
                 </div>
-                <div class="col-md-6">
-                    <p>{{ offer.car }}</p>
-                    <p>Price: {{ offer.price }}</p>
-                    <p>Description: {{ offer.description }}</p>
-                    <p>Renter: {{ offer.user }}</p>
-                </div>
-                <div class="col-md-3">
-                    <a href="{% url 'rent_create' offer.id %}" class="position-link btn btn-secondary">
-                        <div class="position-box">
-                            <span class="position-title">RENT</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-</div>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock body %}
