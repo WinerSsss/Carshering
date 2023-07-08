@@ -48,7 +48,7 @@ class Car(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Model: {self.car_model, self.car_brand}, vin number:({self.vin})'
+        return f'Model: {self.car_model} {self.car_brand}, vin number: ({self.vin})'
 
 
 class Offer(models.Model):
@@ -59,7 +59,7 @@ class Offer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Price: ({self.price}), car:({self.car})'
+        return f'Price: ({self.price}), car:({self.car.car_model} {self.car.car_brand})'
 
 
 class Rent(models.Model):
@@ -81,10 +81,11 @@ class Rent(models.Model):
     rent_start = models.DateField(null=True, validators=[past_rent, future_rent])
     duration = models.PositiveIntegerField(validators=[MaxValueValidator(30), MinValueValidator(1)])
     rent_end = models.DateField(null=True, validators=[past_rent])
+    close_rent = models.BooleanField(default=False)
 
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    close_rent = models.BooleanField(default=False)
+
 
     def save(self, *args, **kwargs):
         self.rent_end = self.rent_start + timedelta(days=self.duration)
