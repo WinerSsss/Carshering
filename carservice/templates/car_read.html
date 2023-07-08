@@ -3,30 +3,72 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <div style="margin: 20px 0 20px 0;">
-        <a href="{% url 'car_create' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Add car</button>
-        </a>
-        <a href="{% url 'car_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show yours cars</button>
-        </a>
-        <a href="{% url 'offer_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</button>
-        </a>
-        <a href="{% url 'rent_read' %}">
-           <button type="submit" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your rents</button>
-        </a>
+<div class="container" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{% url 'car_create' %}" class="position-link btn btn-secondary">
+                <div class="position-box">
+                    <span class="position-title">Add car</span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'car_read' %}" class="position-link btn btn-secondary">
+                <div class="position-box">
+                    <span class="position-title">Show your cars</span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'offer_read' %}" class="position-link btn btn-secondary">
+                <div class="position-box">
+                    <span class="position-title">Show your offers</span>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'rent_read' %}" class="position-link btn btn-secondary">
+                <div class="position-box">
+                    <span class="position-title">Show your rents</span>
+                </div>
+            </a>
+        </div>
     </div>
-<h1>Available cars:</h1>
-{% for car in cars %}
+</div>
 
-<li>
-{% if car.car_photo %}
-    <img class="rounded float-start" style="display: flex; max-width: 200px;" src="{{ car.car_photo.url }}">
-{% else %}
-    <p style="text-align: center;">No photo available</p>
-{% endif %}
-        {{ car.car_brand }} {{ car.car_model }} {{ car.serial_number }} {{ car.date_of_prod }} {{ car.car_mileage }}
-</li>
+<h1>Your cars:</h1>
+
+{% for car in cars %}
+<div class="container" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-3">
+            {% if car.car_photo %}
+                <img class="rounded float-start" style="max-width: 200px;" src="{{ car.car_photo.url }}">
+            {% else %}
+                <p>No photo available</p>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <p class="car-info" style="line-height: 0.5;">Brand: {{ car.car_brand }}</p>
+            <p class="car-info" style="line-height: 0.5;">Model: {{ car.car_model }}</p>
+            <p class="car-info" style="line-height: 0.5;">VIN: {{ car.serial_number }}</p>
+            <p class="car-info" style="line-height: 0.5;">Year: {{ car.date_of_prod }}</p>
+            <p class="car-info" style="line-height: 0.5;">Mileage: {{ car.car_mileage }}</p>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'update_car' car_id=car.id %}" class="position-link btn btn-secondary">
+                <div class="position-box">
+                    <span class="position-title">Update info</span>
+                </div>
+            </a>
+            <a href="{% url 'delete_car' %}" class="position-link btn btn-secondary">
+                <div class="position-box">
+                    <span class="position-title">Delete</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
 {% endfor %}
+
 {% endblock body %}
