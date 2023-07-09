@@ -7,7 +7,7 @@ def update_rent_status():
     for rent in rents:
         if rent.rent_start == now().date():
             rent.status = Rent.ACTIVE
-        elif rent.rent_end > now().date():
+        if rent.rent_end > now().date():
             rent.status = Rent.OVERDUE
 
         rent.save()

@@ -86,7 +86,6 @@ class Rent(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
-
     def save(self, *args, **kwargs):
         self.rent_end = self.rent_start + timedelta(days=self.duration)
         if self.rent_start > now().date():
