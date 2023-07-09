@@ -1,19 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views import generic, View
+from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from .models import Car, Offer, Rent
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-from datetime import timedelta
-from django.utils import timezone
-from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm
-from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from . forms import CarUpdateForm, CarDeleteForm, OfferUpdateForm, OfferDeleteForm, RentUpdateForm, RentDeleteForm
 from django.views.generic import DeleteView
 from django import forms
+
+from .models import Car, Offer, Rent
+from .forms import CarUpdateForm, OfferUpdateForm, RentUpdateForm, RentDeleteForm
 
 
 class CarCreateView(LoginRequiredMixin, CreateView):
@@ -29,18 +26,10 @@ class CarCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        car_photo = form.cleaned_data['car_photo']
-        photo_save = FileSystemStorage()
-        photo_name = photo_save.save(car_photo.name, car_photo)
-        car_photo_url = photo_save.url(photo_name)
         return super().form_valid(form)
 
 
 class CarReadView(LoginRequiredMixin, View):
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Car.objects.all()
@@ -57,12 +46,15 @@ class CarReadView(LoginRequiredMixin, View):
 
 class CarUpdateView(LoginRequiredMixin, View):
     success_url = reverse_lazy('car_read')
-    def get(self, request, car_id):
+
+    @staticmethod
+    def get(request, car_id):
         car = get_object_or_404(Car, pk=car_id)
         form = CarUpdateForm(instance=car)
         return render(request, 'car_update.html', {'form': form, 'car': car})
 
-    def post(self, request, car_id):
+    @staticmethod
+    def post(request, car_id):
         car = get_object_or_404(Car, pk=car_id)
         form = CarUpdateForm(request.POST, request.FILES, instance=car)
         if form.is_valid():
@@ -83,6 +75,23 @@ class CarDeleteView(LoginRequiredMixin, DeleteView):
 
 @login_required
 def carsearch(request):
+    """
+    View function for searching car offers based on search terms.
+
+    The function retrieves the search term from the GET request parameters and performs a search in the database.
+    It splits the search term into brand and model terms, and then queries the `Offer` model to find matching car
+    offers. If both brand and model terms are provided, it searches for exact matches on both.
+    If only the brand term is provided, it searches for exact matches on brand or model.
+    If only the model term is provided, it searches for exact matches on model.
+    The search is case-insensitive.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered HTML response with the search results.
+
+    """
     search = request.GET.get('search')
     offers = Offer.objects.none()
 
@@ -133,15 +142,13 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['car'] = forms.ModelChoiceField(queryset=Car.objects.filter(user=self.request.user, offer__isnull=True))
+        form.fields['car'] = forms.ModelChoiceField(
+            queryset=Car.objects.filter(user=self.request.user, offer__isnull=True)
+        )
         return form
 
 
 class OfferReadView(LoginRequiredMixin, View):
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Offer.objects.all()
@@ -160,7 +167,8 @@ class OfferReadView(LoginRequiredMixin, View):
 class OfferUpdateView(LoginRequiredMixin, View):
     success_url = reverse_lazy('offer_read')
 
-    def get(self, request, offer_id):
+    @staticmethod
+    def get(request, offer_id):
         offer = get_object_or_404(Offer, pk=offer_id)
         form = OfferUpdateForm(instance=offer)
         return render(request, 'offer_update.html', {'form': form, 'offer': offer})
@@ -225,12 +233,14 @@ class RentCreateView(LoginRequiredMixin, CreateView):
 
 
 class RentUpdateView(LoginRequiredMixin, View):
-    def get(self, request, rent_id):
+    @staticmethod
+    def get(request, rent_id):
         rent = get_object_or_404(Rent, id=rent_id)
         form = RentUpdateForm(instance=rent)
         return render(request, 'rent_update.html', {'form': form, 'rent': rent})
 
-    def post(self, request, rent_id):
+    @staticmethod
+    def post(request, rent_id):
         rent = get_object_or_404(Rent, id=rent_id)
         form = RentUpdateForm(request.POST, instance=rent)
         if form.is_valid():
@@ -240,11 +250,13 @@ class RentUpdateView(LoginRequiredMixin, View):
 
 
 class RentDeleteView(LoginRequiredMixin, View):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         form = RentDeleteForm(user=request.user)
         return render(request, 'rent_delete.html', {'form': form})
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         form = RentDeleteForm(request.user, request.POST)
         if form.is_valid():
             rent = form.cleaned_data['rent']
@@ -255,7 +267,9 @@ class RentDeleteView(LoginRequiredMixin, View):
 
 @login_required
 def all_offers(request):
-    offers = Offer.objects.exclude(user=request.user).exclude(rent__status='Rent active').exclude(rent__status='pending')
+    offers = Offer.objects.exclude(
+        user=request.user).exclude(rent__status='Rent active').exclude(rent__status='pending'
+                                                                       )
     return render(request, 'all_offers.html', {'offers': offers})
 
 
