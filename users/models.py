@@ -6,5 +6,5 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/static/image', default='media/static/image/avatar.png')
+    image = models.ImageField(upload_to='media/static/image', default='media/static/image/avatar.jpg')
     location = models.CharField(max_length=30, null=True, blank=True)
