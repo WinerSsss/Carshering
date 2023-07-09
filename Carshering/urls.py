@@ -4,9 +4,11 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 
-from carservice.views import CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, \
-    CarUpdateView, CarDeleteView, OfferUpdateView, OfferDeleteView, RentUpdateView, RentDeleteView, carsearch, offer_result, all_offers, rent_panel, \
-    rent_detail, offer_detail, offer_detail_search, close_rent, rent_archive
+from carservice.views import (
+    CarCreateView, CarReadView, OfferReadView, OfferCreateView, RentCreateView, CarUpdateView,
+    CarDeleteView, OfferUpdateView, OfferDeleteView, RentUpdateView, RentDeleteView, carsearch,
+    offer_result, all_offers, rent_panel, rent_detail, offer_detail, offer_detail_search, close_rent, rent_archive
+    )
 
 
 urlpatterns = [
@@ -27,7 +29,7 @@ urlpatterns = [
     path('offer/delete/<int:pk>/', OfferDeleteView.as_view(), name='offer_delete'),
     path('rent/create/<int:offer_id>/', RentCreateView.as_view(), name='rent_create'),
     path('rent_panel', rent_panel, name='rent_panel'),
-    path('rent/update/<int:rent_id>/', RentUpdateView.as_view(),name='rent_update'),
+    path('rent/update/<int:rent_id>/', RentUpdateView.as_view(), name='rent_update'),
     path('rent/delete/', RentDeleteView.as_view(), name='rent_delete'),
     path('rent_detail/<int:rent_id>/', rent_detail, name='rent_detail'),
     path('offer_detail/<int:offer_id>/', offer_detail, name='offer_detail'),
