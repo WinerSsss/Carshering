@@ -94,6 +94,7 @@ class Rent(models.Model):
             self.status = self.FINISHED
         else:
             self.status = self.ACTIVE
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'

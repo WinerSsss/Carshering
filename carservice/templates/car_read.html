@@ -21,7 +21,13 @@
                 <a href="{% url 'delete_car' pk=car.id %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">DELETE</a>
             </div>
     {% else %}
-        <p style="text-align: center;">No photo available</p>
+        <p style="padding: 35px; text-align: center; display: flex; width: 200px; margin-right: 20px;">No photo available</p>
+             <div>
+                <p style="margin-left: 20px;">{{ car.car_brand }} {{ car.car_model }}</p>
+                <p style="margin-left: 20px;"> Mileage: {{ car.car_mileage }} KM</p>
+                <a href="{% url 'update_car' car_id=car.id %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</a>
+                <a href="{% url 'delete_car' pk=car.id %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">DELETE</a>
+            </div>
     {% endif %}
 </div>
 {% endfor %}
