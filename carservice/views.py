@@ -9,8 +9,8 @@ from django.db.models import Q
 from django.views.generic import DeleteView
 from django import forms
 
-from .models import Car, Offer, Rent
-from .forms import CarUpdateForm, OfferUpdateForm, RentUpdateForm, RentDeleteForm
+from carservice.models import Car, Offer, Rent
+from carservice.forms import CarUpdateForm, OfferUpdateForm, RentUpdateForm, RentDeleteForm
 
 
 class CarCreateView(LoginRequiredMixin, CreateView):

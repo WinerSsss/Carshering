@@ -38,7 +38,7 @@ class Car(models.Model):
         ('Other', 'Other'),
     )
 
-    car_photo = models.ImageField(upload_to='static/image', null=True)
+    car_photo = models.ImageField(upload_to='static/image', null=True, blank=True)
     vin = models.CharField(max_length=17, validators=[check_vin_number], unique=True)
     car_mileage = models.PositiveIntegerField(validators=[validate_mileage])
     car_brand = models.CharField(max_length=15, choices=BRAND_CHOICES)
@@ -90,12 +90,10 @@ class Rent(models.Model):
         self.rent_end = self.rent_start + timedelta(days=self.duration)
         if self.rent_start > now().date():
             self.status = self.PENDING
+        elif self.close_rent:
+            self.status = self.FINISHED
         else:
             self.status = self.ACTIVE
-        if self.close_rent:
-            self.status = self.FINISHED
-            self.rent_end = now().date()
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'Rent status: {self.status}, rent duration: ({self.duration}), offer: {self.offer}, user: {self.user}'
