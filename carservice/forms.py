@@ -26,3 +26,7 @@ class RentDeleteForm(forms.Form):
         self.fields['rent'].queryset = Rent.objects.filter(user=user)
 
     rent = forms.ModelChoiceField(queryset=Rent.objects.none())
+
+
+class UpdateStatusForm(forms.Form):
+    pass

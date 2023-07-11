@@ -11,7 +11,13 @@
             <p style="margin-bottom: 0;">Rent Start: {{ rent.rent_start }}</p>
             <p style="margin-bottom: 0;">Expected return date: {{ rent.rent_end }}</p>
             <p style="margin-bottom: 0;">Rented from: {{ rent.offer.user }}</p>
+         <div style="display: flex; gap: 10px;">
             <a href="{% url 'rent_panel' %}" class="btn btn-outline-secondary" style="padding: 3px; margin-top: 5px;">PREVIOUS PAGE</a>
+            <form method="post" action="{% url 'rent_detail' rent.id %}">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-secondary" style="padding: 3px; margin-top: 5px;">UPDATE</button>
+            </form>
+         </div>
         </div>
     </div>
 {% endblock body %}
