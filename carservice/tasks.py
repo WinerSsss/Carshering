@@ -2,6 +2,7 @@ from django.utils.timezone import now
 
 from carservice.models import Rent
 
+
 def update_status(self):
     rents = Rent.objects.exclude(status=Rent.FINISHED)
     for rent in rents:

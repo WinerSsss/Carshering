@@ -290,9 +290,6 @@ def rent_detail(request, rent_id):
         form = UpdateStatusForm(request.POST)
         if form.is_valid():
             update_status(rent)
-
-    else:
-        form = UpdateStatusForm()
     return render(request, 'rent_detail.html', {'rent': rent, 'offer': offer})
 
 
