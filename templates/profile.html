@@ -8,7 +8,7 @@
     {% if user.profile.image %}
         <img style="border: 5px solid #555; vertical-align: middle; width: 200px; height:200px; border-radius: 50%; margin-bottom: 10px;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar">
     {% else%}
-        <img src="{% static 'image/avatar.jpg' %}" class="card-img">
+        <img  style="border: 5px solid #555; vertical-align: middle; width: 200px; height:200px; border-radius: 50%; margin-bottom: 10px;" class="rounded-circle" src="{% static 'image/avatar.jpg' %}" alt="Avatar"class="card-img">
     {% endif %}
     <p style="background-color: white; padding: 2px; border-radius: 3px;">Email   : {{ user.email }}</p>
     <p style="background-color: white; padding: 2px; border-radius: 3px;">First name: {{ user.first_name }}</p>
