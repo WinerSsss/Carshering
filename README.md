@@ -1,4 +1,4 @@
-# TAKE&RIDE
+# TAKE&DRIVE
 Car renting service
 
 This is an application which allows users to rent or list personal car.
