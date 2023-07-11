@@ -10,15 +10,19 @@
         <a href="{% url 'offer_read' %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">Show your offers</a>
         <a href="{% url 'rent_archive' %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">Rent archive</a>
     </div>
-{% for offer in offers %}
-    <div class="offer-item" style="display: flex; margin-bottom: 24px; align-items: flex-end;">
-        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 20px;" src="{{ offer.car.car_photo.url }}" alt="Car photo">
-        <div>
-            <p style="margin-left: 20px;">{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
-            <p style="margin-left: 20px;">Price: {{ offer.price }} PLN</p>
-            <a href="{% url 'offer_update' offer_id=offer.id %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</a>
-            <a href="{% url 'offer_delete' pk=offer.id %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">DELETE</a>
+    {% for offer in offers %}
+        <div class="offer-item" style="display: flex; margin-bottom: 24px; align-items: flex-end;">
+            {% if offer.car.car_photo %}
+                <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 20px;" src="{{ offer.car.car_photo.url }}" alt="Car photo">
+            {% else %}
+                <p style="padding: 35px; text-align: center; display: flex; width: 200px; margin-right: 20px;">No photo available</p>
+            {% endif %}
+            <div>
+                <p style="margin-left: 20px;">{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
+                <p style="margin-left: 20px;">Price: {{ offer.price }} PLN</p>
+                <a href="{% url 'offer_update' offer_id=offer.id %}" class="btn btn-secondary" style="margin: 0 20px 0 20px;">EDIT</a>
+                <a href="{% url 'offer_delete' pk=offer.id %}" class="btn btn-outline-secondary" style="margin: 0 20px 0 20px;">DELETE</a>
+            </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
 {% endblock body %}

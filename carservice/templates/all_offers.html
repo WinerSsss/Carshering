@@ -24,6 +24,7 @@
             max-height: 100px;
             margin-bottom: 10px;
         }
+
         .buttons {
             display: flex;
             flex-direction: row;
@@ -38,11 +39,17 @@
         {% for offer in offers %}
             {% if not offer.rent %}
                 <div class="offer-item">
-                    <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}" alt="Car photo">
-                        <p>{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
-                        <p>{{ offer.price }} PLN/day </p>
-                    <div class="buttons"><a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
-                    <a href="{% url 'offer_detail' offer.id %}" class="btn btn-outline-secondary">DETAILS</a></div>
+                    {% if offer.car.car_photo %}
+                        <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}" alt="Car photo">
+                    {% else %}
+                        <p style="padding: 35px; text-align: center; display: flex; width: 200px; margin-right: 20px;">No photo available</p>
+                    {% endif %}
+                    <p>{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
+                    <p>{{ offer.price }} PLN/day </p>
+                    <div class="buttons">
+                        <a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
+                        <a href="{% url 'offer_detail' offer.id %}" class="btn btn-outline-secondary">DETAILS</a>
+                    </div>
                 </div>
             {% endif %}
         {% endfor %}
