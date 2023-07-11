@@ -6,7 +6,9 @@
     <div class="profile-info-container" style="background-color: #eeeeee; border-radius: 10px; padding: 10px; margin-top: 20px;">
     <h4 style="margin-top: 20px;">Your profile: {{ user.username }}</h4>
     {% if user.profile.image %}
-    <img style="border: 5px solid #555; vertical-align: middle; width: 200px; height:200px; border-radius: 50%; margin-bottom: 10px;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar">
+        <img style="border: 5px solid #555; vertical-align: middle; width: 200px; height:200px; border-radius: 50%; margin-bottom: 10px;" class="rounded-circle" src="{{ user.profile.image.url }}" alt="Avatar">
+    {% else%}
+        <img src="{% static 'image/avatar.jpg' %}" class="card-img">
     {% endif %}
     <p style="background-color: white; padding: 2px; border-radius: 3px;">Email   : {{ user.email }}</p>
     <p style="background-color: white; padding: 2px; border-radius: 3px;">First name: {{ user.first_name }}</p>

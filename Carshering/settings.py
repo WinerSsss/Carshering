@@ -32,11 +32,6 @@ ALLOWED_HOSTS = ["*"]
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Media settings
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # Email settings
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -144,7 +139,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / STATIC_URL,
+    BASE_DIR / STATIC_URL, 'static',
 ]
 
 # Default primary key field type
