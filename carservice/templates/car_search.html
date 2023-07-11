@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-        <style>
+    <style>
         .offer-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -30,25 +30,40 @@
             justify-content: space-between;
             margin-top: -10px;
         }
+        .no-photo {
+            padding: 35px;
+            text-align: center;
+            display: flex;
+            width: 200px;
+            margin-right: 10px;
+        }
     </style>
 
     <h2 style="margin-top: 10px;">FOUND CARS:</h2>
     <hr>
-  {% if offers %}
-    <div class="offer-container">
-        {% for offer in offers %}
-            {% if not offer.rent %}
-                <div class="offer-item">
-                    <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}" alt="Car photo">
+    {% if offers %}
+        <div class="offer-container">
+            {% for offer in offers %}
+                {% if not offer.rent %}
+                    <div class="offer-item">
+                        {% if offer.car.car_photo %}
+                            <img class="rounded offer-image" src="{{ offer.car.car_photo.url }}" alt="Car photo">
+                        {% else %}
+                            <div class="no-photo">
+                                No photo available
+                            </div>
+                        {% endif %}
                         <p>{{ offer.car.car_brand }} {{ offer.car.car_model }}</p>
-                        <p>{{ offer.price }} PLN/day </p>
-                    <div class="buttons"><a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
-                    <a href="{% url 'offer_detail_search' offer.id %}" class="btn btn-outline-secondary">DETAILS</a></div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-  {% else %}
-    <p style="margin-top: 20px">No results for {{ search }}.</p>
-  {% endif %}
+                        <p>{{ offer.price }} PLN/day</p>
+                        <div class="buttons">
+                            <a href="{% url 'rent_create' offer.id %}" class="btn btn-secondary" style="margin-right: 5px">RENT</a>
+                            <a href="{% url 'offer_detail_search' offer.id %}" class="btn btn-outline-secondary">DETAILS</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="margin-top: 20px">No results for {{ search }}.</p>
+    {% endif %}
 {% endblock %}

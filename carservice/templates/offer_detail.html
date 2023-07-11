@@ -12,12 +12,25 @@
             display: flex;
             align-items: flex-start;
         }
+        .no-photo {
+            padding: 35px;
+            text-align: center;
+            display: flex;
+            width: 200px;
+            margin-right: 10px;
+        }
     </style>
 
     <h2 style="margin-top: 10px;">OFFER DETAILS</h2>
     <hr>
     <div class="offer-details-container">
-        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 10px;" src="{{ offer.car.car_photo.url }}" alt="Car photo">
+        {% if offer.car.car_photo %}
+            <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 10px;" src="{{ offer.car.car_photo.url }}" alt="Car photo">
+        {% else %}
+            <div class="no-photo">
+                No photo available
+            </div>
+        {% endif %}
         <div style="flex-direction: column;">
             <label>
                 <textarea class="form-control description-field" readonly>{{ offer.description }}</textarea>

@@ -5,19 +5,25 @@
     <h2 style="margin-top: 10px;">RENT DETAILS</h2>
     <hr>
     <div style="display: flex; align-items: flex-end;">
-        <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 10px;" src="{{ rent.offer.car.car_photo.url }}" alt="Car photo">
+        {% if rent.offer.car.car_photo %}
+            <img class="rounded float-start" style="display: flex; max-width: 200px; margin-right: 10px;" src="{{ rent.offer.car.car_photo.url }}" alt="Car photo">
+        {% else %}
+            <div class="no-photo">
+                <p style="padding: 35px; text-align: center; display: flex; width: 200px; margin-right: 20px;">No photo available</p>
+            </div>
+        {% endif %}
         <div style="flex-direction: column;">
             <p style="margin-bottom: 0;">Status: {{ rent.status }}</p>
             <p style="margin-bottom: 0;">Rent Start: {{ rent.rent_start }}</p>
             <p style="margin-bottom: 0;">Expected return date: {{ rent.rent_end }}</p>
             <p style="margin-bottom: 0;">Rented from: {{ rent.offer.user }}</p>
-         <div style="display: flex; gap: 10px;">
-            <a href="{% url 'rent_panel' %}" class="btn btn-outline-secondary" style="padding: 3px; margin-top: 5px;">PREVIOUS PAGE</a>
-            <form method="post" action="{% url 'rent_detail' rent.id %}">
-            {% csrf_token %}
-                <button type="submit" class="btn btn-secondary" style="padding: 3px; margin-top: 5px;">UPDATE</button>
-            </form>
-         </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{% url 'rent_panel' %}" class="btn btn-outline-secondary" style="padding: 3px; margin-top: 5px;">PREVIOUS PAGE</a>
+                <form method="post" action="{% url 'rent_detail' rent.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary" style="padding: 3px; margin-top: 5px;">UPDATE</button>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock body %}
