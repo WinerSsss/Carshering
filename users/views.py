@@ -81,9 +81,10 @@ class Register(FormView):
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'reset_password/password_reset_form.html'
-    email_template_name = 'reset_password/password_reset_email.html'
-    success_url = reverse_lazy('password_reset')
+    email_template_name = 'reset_password/password_reset_email.txt'
+    success_url = reverse_lazy('password_reset_done')
     form_class = PasswordResetForm
+    from_email = 'projectofwiners@gmail.com'
 
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
