@@ -9,8 +9,9 @@ from django.db.models import Q
 from django.views.generic import DeleteView
 from django import forms
 
-from .models import Car, Offer, Rent
-from .forms import CarUpdateForm, OfferUpdateForm, RentUpdateForm, RentDeleteForm
+from carservice.models import Car, Offer, Rent
+from carservice.forms import CarUpdateForm, OfferUpdateForm, RentUpdateForm, RentDeleteForm, UpdateStatusForm
+from carservice.tasks import update_status
 
 
 class CarCreateView(LoginRequiredMixin, CreateView):
@@ -285,6 +286,10 @@ def rent_panel(request):
 def rent_detail(request, rent_id):
     rent = get_object_or_404(Rent, id=rent_id)
     offer = rent.offer
+    if request.method == 'POST':
+        form = UpdateStatusForm(request.POST)
+        if form.is_valid():
+            update_status(rent)
     return render(request, 'rent_detail.html', {'rent': rent, 'offer': offer})
 
 

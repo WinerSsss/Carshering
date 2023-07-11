@@ -1,11 +1,11 @@
-from . models import Car, Offer, Rent
+from .models import Car, Offer, Rent
 from django import forms
 
 
 class CarUpdateForm(forms.ModelForm):
     class Meta:
         model = Car
-        fields = ['vin', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod', "car_photo"]
+        fields = ['vin', 'car_mileage', 'car_brand', 'car_model', 'date_of_prod', 'car_photo']
 
 
 class OfferUpdateForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class OfferUpdateForm(forms.ModelForm):
 class RentUpdateForm(forms.ModelForm):
     class Meta:
         model = Rent
-        fields = ['status', 'rent_start', 'offer', 'user']
+        fields = ['rent_start', 'duration']
 
 
 class RentDeleteForm(forms.Form):
@@ -26,3 +26,7 @@ class RentDeleteForm(forms.Form):
         self.fields['rent'].queryset = Rent.objects.filter(user=user)
 
     rent = forms.ModelChoiceField(queryset=Rent.objects.none())
+
+
+class UpdateStatusForm(forms.Form):
+    pass
