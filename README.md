@@ -29,6 +29,15 @@ This is an application which allows users to rent or list personal car.
            python manage.py migrate carservice
            python manage.py migrate users
 
+1.5 Configuration
+   - Create a .env file in the root directory of the project.
+   - In the .env file, add the following lines:
+
+           SECRET_KEY="your_secret_key"
+           DEBUG=True
+
+     Replace "your_secret_key" with your desired secret key value.
+
 ## 2. Usage
 2.1 To use this application you need to type (if you're in your workspace directory):
 
@@ -77,6 +86,3 @@ This is an application which allows users to rent or list personal car.
 ![Opis obrazka](https://i.gyazo.com/e95b7dae29b59483240b39eafb190909.png)
 ![Opis obrazka](https://i.gyazo.com/bbe55dbe1b01148ca268e0ab4532a2ca.png)
 ![Opis obrazka](https://i.gyazo.com/89c200d5ad3c2dcd5ee6be888fbf04a5.png)
-
-
-
