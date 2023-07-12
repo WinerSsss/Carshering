@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 crispy-bootstrap5==0.7
 Django==4.2.2
 django-crispy-forms==2.0
@@ -6,9 +5,3 @@ pytest==7.4.0
 pytest-cov==4.1.0
 pytest-django==4.5.2
 python-dotenv==1.0.0
-=======
-Django == 4.2.2
-python-dotenv == 1.0.0
-django-crispy-forms==2.0
-crispy-bootstrap5==0.7
->>>>>>> 4c02f788256840c9a48ec59ec436652ae909b2df
