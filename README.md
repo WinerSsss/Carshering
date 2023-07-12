@@ -74,7 +74,6 @@ This is an application which allows users to rent or list personal car.
 ![Opis obrazka](https://i.gyazo.com/d19af5906775075deb9200fa79fe5e43.png)
 ![Opis obrazka](https://i.gyazo.com/0de0497039092b52529439c41589db64.png)
 ![Opis obrazka](https://i.gyazo.com/1d6e322eae20b73f6c5e43892157dd0f.png)
-![Opis obrazka](https://i.gyazo.com/ab360e96c47d5867fbd00c2b7a42d746.png)
 ![Opis obrazka](https://i.gyazo.com/e95b7dae29b59483240b39eafb190909.png)
 ![Opis obrazka](https://i.gyazo.com/bbe55dbe1b01148ca268e0ab4532a2ca.png)
 ![Opis obrazka](https://i.gyazo.com/89c200d5ad3c2dcd5ee6be888fbf04a5.png)
