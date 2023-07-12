@@ -21,6 +21,14 @@ This is an application which allows users to rent or list personal car.
 
            pip install -r requirements.txt
 
+4. Database
+   - This application uses SQLite database. To create database you need to type:
+
+           python manage.py makemigrations carservice
+           python manage.py makemigrations users
+           python manage.py migrate carservice
+           python manage.py migrate users
+
 ## Usage
 - To use this application you need to type (if you're in your workspace directory):
 
@@ -43,6 +51,7 @@ This is an application which allows users to rent or list personal car.
   - User registration/login
   - Updating user profile
   - Password change
+  - Rent panel with history of rents
 
 
 - To do:
@@ -51,10 +60,11 @@ This is an application which allows users to rent or list personal car.
   - Adding cars/offers sorting
 
 
-- Technologies used:
-  - Python 3.10.6
-  - Django == 4.2.2
-  - HTML
-  - Bootstrap
-  - crispy_forms
-  - crispy-bootstrap5
+5. Technologies used:
+  - crispy-bootstrap5==0.7
+  - Django==4.2.2
+  - django-crispy-forms==2.0
+  - pytest==7.4.0
+  - pytest-cov==4.1.0
+  - pytest-django==4.5.2
+  - python-dotenv==1.0.0
