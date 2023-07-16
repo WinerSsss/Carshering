@@ -1,0 +1,26 @@
+language: python
+python:
+  - '3.11'
+
+install:
+  - pip install -r requirements.txt
+
+before_script:
+  - python manage.py makemigrations carservice
+  - python manage.py makemigrations users
+  - python manage.py migrate carservice
+  - python manage.py migrate users
+  - python manage.py makemigrations
+  - python manage.py migrate
+
+script:
+  - python manage.py runserver &
+  - sleep 5
+  - python manage.py test
+
+notifications:
+  email:
+    recipients:
+      - projectofwiners@gmail.com
+    on_success: always
+    on_failure: always
