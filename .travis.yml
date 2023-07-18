@@ -7,6 +7,9 @@ install:
   - pip install -r requirements.txt
 
 before_script:
+  - choco install sqlite
+  - refreshenv
+
   - python manage.py makemigrations carservice
   - python manage.py makemigrations users
   - python manage.py migrate carservice
