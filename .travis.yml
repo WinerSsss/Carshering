@@ -1,14 +1,14 @@
 language: python
 python:
   - "3.9"
-  - "3.10"
 
 install:
   - pip install -r requirements.txt
 
 before_script:
-  - choco install sqlite
-  - refreshenv
+  - curl -LO https://www.sqlite.org/2022/sqlite-tools-win32-x86-3360000.zip
+  - 7z x sqlite-tools-win32-x86-3360000.zip -osqlite
+  - export PATH=$PATH:$PWD/sqlite
 
   - python manage.py makemigrations carservice
   - python manage.py makemigrations users
