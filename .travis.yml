@@ -1,6 +1,7 @@
 language: python
 python:
-  - '3.11-dev'
+  - "3.9"
+  - "3.10"
 
 install:
   - pip install -r requirements.txt
@@ -14,8 +15,7 @@ before_script:
   - python manage.py migrate
 
 script:
-  - python manage.py runserver &
-  - sleep 5
+  - python manage.py runserver
   - python manage.py test
 
 notifications:
