@@ -80,6 +80,7 @@ This is an application which allows users to rent or list personal car.
   - pytest-django==4.5.2
   - python-dotenv==1.0.0
   - Docker
+  - Travis CI
 
 ## 3. Running in Docker container
 
