@@ -6,6 +6,7 @@ services:
   - docker
 
 before_install:
+  - pip install --upgrade pip
   - docker build -t takedrive .
 
 script:
