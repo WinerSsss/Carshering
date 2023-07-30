@@ -13,5 +13,9 @@ addons:
     packages:
       - sqlite3
 
+env:
+  global:
+    - SECRET_KEY="SECRET_KEY"
+    - DEBUG=True
 script:
   - pytest --ds=Carshering.settings
