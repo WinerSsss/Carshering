@@ -79,8 +79,25 @@ This is an application which allows users to rent or list personal car.
   - pytest-cov==4.1.0
   - pytest-django==4.5.2
   - python-dotenv==1.0.0
+  - Docker
 
-## 3. Screenshots
+3. Running in Docker container
+
+To run the application in a Docker container, follow these steps:
+
+3.1. Build the Docker image:
+
+docker build -t takedrive .
+
+4.2. Run the Docker container:
+
+docker run -p 8001:8001 takedrive
+
+After executing these steps, the application will be available at http://localhost:8001/.
+
+Note: Make sure you have Docker installed on your computer before attempting to run in a container.
+
+## 4. Screenshots
 
 ![Opis obrazka](https://i.gyazo.com/d19af5906775075deb9200fa79fe5e43.png)
 ![Opis obrazka](https://i.gyazo.com/0de0497039092b52529439c41589db64.png)
