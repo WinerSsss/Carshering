@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.9"
+
+services:
+  - docker
+
+before_install:
+  - docker build -t takedrive .
+
+script:
+  # Tutaj możesz umieścić swoje testy, np. komendę do uruchomienia testów Django
+  - docker run takedrive python manage.py test
+
+# Dodatkowe konfiguracje lub kroki po zakończeniu testów, np. wdrożenie na serwer
+
