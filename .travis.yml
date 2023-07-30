@@ -1,13 +1,17 @@
+dist: focal
+
 language: python
 python:
   - "3.9"
 
-services:
-  - docker
-
 before_install:
   - pip install --upgrade pip
   - pip install -r requirements.txt
+
+addons:
+  apt:
+    packages:
+      - sqlite3
 
 script:
   - pytest --ds=Carshering.settings
