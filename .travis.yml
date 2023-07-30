@@ -2,16 +2,9 @@ language: python
 python:
   - "3.9"
 
-services:
-  - docker
-
 before_install:
   - pip install --upgrade pip
-  - docker build -t takedrive .
+  - pip install -r requirements.txt
 
 script:
-  # Tutaj możesz umieścić swoje testy, np. komendę do uruchomienia testów Django
-  - docker run takedrive python manage.py test
-
-# Dodatkowe konfiguracje lub kroki po zakończeniu testów, np. wdrożenie na serwer
-
+  - pytest
