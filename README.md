@@ -87,11 +87,11 @@ To run the application in a Docker container, follow these steps:
 
 3.1. Build the Docker image:
 
-docker build -t takedrive .
+```docker build -t takedrive .```
 
 3.2. Run the Docker container:
 
-docker run -p 8001:8001 takedrive
+```docker run -p 8001:8001 takedrive```
 
 After executing these steps, the application will be available at http://localhost:8001/.
 
@@ -102,6 +102,6 @@ Note: Make sure you have Docker installed on your computer before attempting to 
 ![Opis obrazka](https://i.gyazo.com/d19af5906775075deb9200fa79fe5e43.png)
 ![Opis obrazka](https://i.gyazo.com/0de0497039092b52529439c41589db64.png)
 ![Opis obrazka](https://i.gyazo.com/1d6e322eae20b73f6c5e43892157dd0f.png)
-![Opis obrazka](https://i.gyazo.com/e95b7dae29b59483240b39eafb190909.png)
+![Opis obrazka](https://i.gyazo.com/00d3a2a4181c6e1a813eb5c2a25b0edf.png)
 ![Opis obrazka](https://i.gyazo.com/bbe55dbe1b01148ca268e0ab4532a2ca.png)
 ![Opis obrazka](https://i.gyazo.com/89c200d5ad3c2dcd5ee6be888fbf04a5.png)
