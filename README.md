@@ -81,7 +81,7 @@ This is an application which allows users to rent or list personal car.
   - python-dotenv==1.0.0
   - Docker
 
-3. Running in Docker container
+## 3. Running in Docker container
 
 To run the application in a Docker container, follow these steps:
 
@@ -89,7 +89,7 @@ To run the application in a Docker container, follow these steps:
 
 docker build -t takedrive .
 
-4.2. Run the Docker container:
+3.2. Run the Docker container:
 
 docker run -p 8001:8001 takedrive
 
