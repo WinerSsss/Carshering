@@ -1,3 +1,6 @@
+import io
+
+from django.http import FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.urls import reverse_lazy
@@ -8,6 +11,8 @@ from django.utils.timezone import now
 from django.db.models import Q
 from django.views.generic import DeleteView
 from django import forms
+
+from reportlab.pdfgen import canvas
 
 from carservice.models import Car, Offer, Rent
 from carservice.forms import CarUpdateForm, OfferUpdateForm, RentUpdateForm, RentDeleteForm, UpdateStatusForm
@@ -193,6 +198,33 @@ class OfferDeleteView(LoginRequiredMixin, DeleteView):
         return queryset.filter(user=self.request.user)
 
 
+@login_required
+def rent_confirmation_pdf(request, rent_id):
+    rent = get_object_or_404(Rent, id=rent_id, user=request.user)
+
+    price_of_rent = rent.offer.price * rent.duration
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+
+    p.setFont('Helvetica', 16)
+
+    p.drawString(100, 800, f'{rent.offer.car.car_brand} {rent.offer.car.car_model}')
+    p.drawString(100, 780, f'Rent Details for Rent ID: {rent_id}')
+    p.drawString(100, 760, f'User: {rent.user}')
+    p.drawString(100, 740, f'Rent Start: {rent.rent_start}')
+    p.drawString(100, 720, f'Duration: {rent.duration}')
+    p.drawString(100, 700, f'Rent End: {rent.rent_end}')
+    p.drawString(100, 680, f'Amount to pay: {price_of_rent} PLN.')
+
+    p.save()
+
+    buffer.seek(0)
+    filename = f'rent_confirmation_{rent_id}.pdf'
+
+    return FileResponse(buffer, as_attachment=True, filename=filename)
+
+
 class RentCreateView(LoginRequiredMixin, CreateView):
     model = Rent
     fields = ['rent_start', 'duration']
@@ -216,6 +248,7 @@ class RentCreateView(LoginRequiredMixin, CreateView):
             return self.offer_already_rented_response(offer)
 
         form.instance.offer = offer
+
         return super().form_valid(form)
 
     def cannot_rent_own_car_response(self, offer):
@@ -290,6 +323,10 @@ def rent_detail(request, rent_id):
         form = UpdateStatusForm(request.POST)
         if form.is_valid():
             update_status(rent)
+
+    if 'generate_pdf' in request.GET:
+        return rent_confirmation_pdf(request, rent_id=rent.id)
+
     return render(request, 'rent_detail.html', {'rent': rent, 'offer': offer})
 
 
