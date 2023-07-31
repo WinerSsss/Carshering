@@ -52,24 +52,24 @@ This is an application which allows users to rent or list personal car.
 
 
 2.3 Main functionalities:
-  ✅ Add car to rent with all details
-  ✅ List cars in offer tab
-  ✅ Rent car
-  ✅ Add car to rent
-  ✅ Choose rent timeline
-  ✅ Update offer
-  ✅ Update car details
-  ✅ User registration/login
-  ✅ Updating user profile
-  ✅ Password change
-  ✅ Rent panel with history of rents
-  ✅ Generating PDF reports with rent information
+  - Add car to rent with all details 
+  - List cars in offer tab
+  - Rent car
+  - Add car to rent
+  - Choose rent timeline
+  - Update offer
+  - Update car details
+  - User registration/login
+  - Updating user profile
+  - Password change
+  - Rent panel with history of rents
+  - Generating PDF reports with rent information
 
 
 2.4 To do:
-  📌 Adding localization
-  📌 Adding map home page
-  📌 Adding cars/offers sorting
+  - Adding localization
+  - Adding map home page
+  - Adding cars/offers sorting
 
 
 2.5 Technologies used:
