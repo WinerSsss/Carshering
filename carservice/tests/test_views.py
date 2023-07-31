@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.timezone import now
+from django.utils.timezone import now, timedelta
 
 from carservice.models import Car, Offer, Rent
 from carservice.views import RentCreateView
@@ -341,4 +341,7 @@ class TestRentCreateView(TestCase):
     def test_get_initial(self):
         view = RentCreateView()
         initial = view.get_initial()
-        self.assertEqual(initial['rent_start'], now())
+        rent_start = initial['rent_start']
+        current_time = now()
+        max_difference = timedelta(milliseconds=5)
+        self.assertAlmostEqual(rent_start, current_time, delta=max_difference)
