@@ -98,7 +98,13 @@ After executing these steps, the application will be available at http://localho
 
 Note: Make sure you have Docker installed on your computer before attempting to run in a container.
 
-## 4. Screenshots
+## 4. Running Tests
+
+To run the tests, execute the following command:
+```
+pytest --ds=Carshering.settings
+
+## 5. Screenshots
 
 ![Opis obrazka](https://i.gyazo.com/d19af5906775075deb9200fa79fe5e43.png)
 ![Opis obrazka](https://i.gyazo.com/0de0497039092b52529439c41589db64.png)
