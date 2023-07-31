@@ -22,6 +22,7 @@
                 <form method="post" action="{% url 'rent_detail' rent.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-secondary" style="padding: 3px; margin-top: 5px;">UPDATE</button>
+                    <a href="{% url 'rent_confirmation_pdf' rent.id %}" class="btn btn-primary" style="padding: 3px; margin-top: 5px;">PDF</a>
                 </form>
             </div>
         </div>
