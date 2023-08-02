@@ -102,7 +102,7 @@ Note: Make sure you have Docker installed on your computer before attempting to 
 ## 4. Running Tests
 
 To run the tests, execute the following command:
-```pytest --ds=Carshering.settings```git check
+```pytest --ds=Carshering.settings```
 
 ## 5. Screenshots
 
