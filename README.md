@@ -26,9 +26,6 @@ This is an application which allows users to rent or list personal car.
 
            python manage.py makemigrations carservice
            python manage.py makemigrations users
-           python manage.py migrate carservice
-           python manage.py migrate users
-           python manage.py makemigrations
            python manage.py migrate
 
 1.5 Configuration
