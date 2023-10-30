@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "users",
     'crispy_forms',
     'crispy_bootstrap5',
+    'payment.apps.PaymentConfig',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -146,3 +147,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+STRIPE_PUBLISHABLE_KEY = '' # key
+STRIPE_SECRET_KEY = '' # secret key
+STRIPE_API_VERSION = '' # date

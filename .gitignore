@@ -136,6 +136,7 @@ celerybeat.pid
 # Environments
 Carshering/.env
 .venv
+.env
 env/
 venv/
 ENV/
