@@ -385,4 +385,13 @@ pyrightconfig.json
 # Image files
 *.webp
 
+# Additional project-specific ignores
+logs/
+staticfiles/
+*.backup
+*.bak
+dump.rdb
+.vscode/
+.DS_Store
+
 # End of https://www.toptal.com/developers/gitignore/api/python,django,pycharm
